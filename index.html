@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dados dos Jogos</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .container {
+            max-width: 90%; /* Aumenta a largura máxima do container */
+            margin: auto;
+            padding: 2rem;
+            text-align: center;
+        }
+        #tabela-container {
+            margin-top: 2rem;
+            overflow-x: auto; /* Adiciona barra de rolagem horizontal se necessário */
+            border: 1px solid #e5e7eb; /* Adiciona borda à tabela */
+            border-radius: 0.5rem; /* Adiciona arredondamento à borda */
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1); /* Adiciona sombra */
+        }
+        #dados-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background-color: white;
+        }
+        #dados-table thead th {
+            padding: 0.75rem;
+            background-color: #f9fafb; /* Cor de fundo do cabeçalho */
+            color: #4b5563; /* Cor do texto do cabeçalho */
+            font-weight: 600; /* Negrito */
+            text-align: left; /* Alinha o texto à esquerda */
+            border-bottom: 2px solid #e5e7eb; /* Borda inferior do cabeçalho */
+        }
+        #dados-table tbody td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #f3f4f6; /* Borda inferior das células */
+            color: #6b7280; /* Cor do texto das células */
+        }
+        #dados-table tbody tr:hover {
+            background-color: #f0f0f0; /* Cor de fundo do hover */
+        }
+        #graficos-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-top: 2rem;
+        }
+        .grafico-container {
+            width: 100%;
+            max-width: 500px; /* Largura máxima dos gráficos */
+            margin-bottom: 2rem;
+            border: 1px solid #e5e7eb; /* Adiciona borda aos gráficos */
+            border-radius: 0.5rem; /* Arredonda a borda dos gráficos */
+            padding: 1.5rem;
+            background-color: white;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1); /* Sombra dos gráficos */
+        }
+        .grafico-container h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #374151; /* Cor do título do gráfico */
+            text-align: center; /* Centraliza o título */
+        }
+        .select-container {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .select-container label {
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .select-container select {
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            width: 200px;
+            max-width: 100%;
+            font-size: 0.875rem;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+        }
+
+        .select-container select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        #chart-container {
+            width: 100%;
+            height: 300px; /* Altura fixa para os gráficos */
+            position: relative; /* Necessário para o Chart.js */
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            #graficos-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .grafico-container {
+                width: 100%;
+                max-width: 100%;
+                padding: 1rem;
+            }
+            #dados-table {
+                font-size: 0.8rem;
+            }
+            #dados-table thead th,
+            #dados-table tbody td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+
+</head>
+
+<body class="bg-gray-100">
+    <div class="container">
+        <h1 class="text-2xl font-semibold text-gray-800 mb-4">Dados e Gráficos dos Jogos</h1>
+        <p class="text-gray-600 mb-6">Bem-vindo! Aqui você encontra dados sobre jogos e gráficos informativos.</p>
+
+        <div id="tabela-container" class="rounded-lg shadow-md">
+            <table id="dados-table" class="min-w-full">
+                <thead>
+                    <tr>
+                        <th>App ID</th>
+                        <th>Nome</th>
+                        <th>Data de Lançamento</th>
+                        <th>É Gratuito</th>
+                        <th>Tipo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="5" class="text-center text-gray-500">Carregando dados...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="graficos-container" class="mt-8">
+            <div class="grafico-container">
+                <h2>Gráfico de Tipos de Jogos</h2>
+                <div class="select-container">
+                    <label for="tipo-grafico-tipo">Tipo de Gráfico:</label>
+                    <select id="tipo-grafico-tipo">
+                        <option value="bar">Gráfico de Barras</option>
+                        <option value="pie">Gráfico de Pizza</option>
+                        <option value="doughnut">Gráfico de Donut</option>
+                    </select>
+                </div>
+                <div id="tipo-jogo-chart-container" class="chart-container">
+                    <canvas id="tipo-jogo-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="grafico-container">
+                <h2>Gráfico de Jogos Gratuitos vs. Pagos</h2>
+                 <div class="select-container">
+                    <label for="tipo-grafico-gratuito">Tipo de Gráfico:</label>
+                    <select id="tipo-grafico-gratuito">
+                        <option value="bar">Gráfico de Barras</option>
+                        <option value="pie">Gráfico de Pizza</option>
+                        <option value="doughnut">Gráfico de Donut</option>
+                    </select>
+                </div>
+                <div id="gratuidade-chart-container" class="chart-container">
+                    <canvas id="gratuidade-chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const apiUrl = 'http://127.0.0.1:5000/';
+
+    async function buscarDadosDaApi() {
+        try {
+            console.log('Tentando buscar dados da API...');
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
+            }
+            const dados = await response.json();
+            console.log('Dados recebidos da API:', dados);
+            atualizarTabela(dados);
+            criarGraficoTipos(dados, 'bar');
+            criarGraficoGratuidade(dados, 'bar');
+
+             document.getElementById('tipo-grafico-tipo').addEventListener('change', (event) => {
+                criarGraficoTipos(dados, event.target.value);
+            });
+
+            document.getElementById('tipo-grafico-gratuito').addEventListener('change', (event) => {
+                criarGraficoGratuidade(dados, event.target.value);
+            });
+
+
+        } catch (error) {
+            console.error('Erro ao buscar dados da API:', error);
+            document.getElementById('dados-table').querySelector('tbody').innerHTML = `
+                <tr>
+                    <td colspan="5" class="text-center text-red-500">Erro ao carregar os dados: ${error.message}</td>
+                </tr>
+            `;
+        }
+    }
+
+    function atualizarTabela(dados) {
+        const tabelaBody = document.getElementById('dados-table').querySelector('tbody');
+        let html = '';
+        if (dados && dados.data && dados.data.length > 0) {
+            dados.data.forEach(item => {
+                html += `
+                    <tr>
+                        <td>${item.app_id}</td>
+                        <td>${item.name}</td>
+                        <td>${item.release_date}</td>
+                        <td>${item.is_free ? 'Sim' : 'Não'}</td>
+                        <td>${item.type}</td>
+                    </tr>
+                `;
+            });
+        } else {
+            html = `
+                <tr>
+                    <td colspan="5" class="text-center text-gray-500">Nenhum dado encontrado.</td>
+                </tr>
+            `;
+        }
+        tabelaBody.innerHTML = html;
+    }
+
+    let tipoJogoChartInstance = null;
+    function criarGraficoTipos(dados, tipoGrafico) {
+        const tipos = {};
+        if(dados && dados.data){
+             dados.data.forEach(item => {
+                tipos[item.type] = (tipos[item.type] || 0) + 1;
+            });
+        }
+
+
+        const labels = Object.keys(tipos);
+        const valores = Object.values(tipos);
+        const cores = gerarCoresAleatorias(labels.length);
+
+        const ctx = document.getElementById('tipo-jogo-chart').getContext('2d');
+
+        if (tipoJogoChartInstance) {
+            tipoJogoChartInstance.destroy();
+        }
+
+        const graficoConfig = {
+            type: tipoGrafico,
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Tipos de Jogos',
+                    data: valores,
+                    backgroundColor: cores,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    },
+                    title: {
+                        display: false,
+                        text: 'Tipos de Jogos'
+                    }
+                }
+            }
+        };
+
+        if (tipoGrafico === 'pie' || tipoGrafico === 'doughnut') {
+            graficoConfig.options.plugins.legend.position = 'right';
+        }
+
+        tipoJogoChartInstance = new Chart(ctx, graficoConfig);
+    }
+
+    let gratuidadeChartInstance = null;
+    function criarGraficoGratuidade(dados, tipoGrafico) {
+        const gratuidade = {
+            Gratuito: 0,
+            Pago: 0
+        };
+
+        if(dados && dados.data){
+            dados.data.forEach(item => {
+                if (item.is_free) {
+                    gratuidade.Gratuito++;
+                } else {
+                    gratuidade.Pago++;
+                }
+            });
+        }
+
+
+        const labels = Object.keys(gratuidade);
+        const valores = Object.values(gratuidade);
+        const cores = ['#4CAF50', '#F44336']; // Verde para Gratuito, Vermelho para Pago
+
+        const ctx = document.getElementById('gratuidade-chart').getContext('2d');
+
+        if (gratuidadeChartInstance) {
+            gratuidadeChartInstance.destroy();
+        }
+
+        const graficoConfig = {
+            type: tipoGrafico,
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Jogos Gratuitos vs. Pagos',
+                    data: valores,
+                    backgroundColor: cores,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    },
+                    title: {
+                        display: false,
+                        text: 'Jogos Gratuitos vs. Pagos'
+                    }
+                }
+            }
+        };
+
+          if (tipoGrafico === 'pie' || tipoGrafico === 'doughnut') {
+            graficoConfig.options.plugins.legend.position = 'right';
+        }
+
+        gratuidadeChartInstance = new Chart(ctx, graficoConfig);
+    }
+
+    function gerarCoresAleatorias(numCores) {
+        const cores = [];
+        for (let i = 0; i < numCores; i++) {
+            cores.push('#' + Math.floor(Math.random() * 16777215).toString(16));
+        }
+        return cores;
+    }
+
+    document.addEventListener('DOMContentLoaded', buscarDadosDaApi);
+    </script>
+</body>
+</html>
