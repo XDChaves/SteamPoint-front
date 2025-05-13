@@ -1,75 +1,160 @@
 :root {
-  --border: 3px solid rgb(255, 255, 255);
-  --transition: 0.2s linear;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Jost", sans-serif;
-  text-decoration: none;
+  font-size: 1rem;
 }
 
 body {
-  background: linear-gradient(to right, #ff7e5f, #feb47b);
-  height: 100vh;
+  font-family: "Inter", sans-serif;
+}
+.bbground{
+  background-color: rgb(32, 30, 63);
 }
 
-#main-header {
-  z-index: 5;
-  position: sticky;
-  top: 0;
-  left: 0;
-  right: 0;
-  box-shadow: 0 3px 5px rgb(10, 10, 10);
-  background-color: #080016;
-  padding: 0.5rem 4rem;
-  width: 100%;
-  height: 6.25rem;
+#teste {
+  padding: 12px;
+}
 
-  nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-weight: 700;
+#myTable_length {
+  margin-bottom: 12px;
+}
 
-    .logo-header {
-      width: 260px;
-      display: flex;
-      align-items: center;
+#myTable {
+  border: #181a1f 1px solid;
+  border-radius: 1px;
+}
 
-      img {
-        width: 5rem;
-        height: 5rem;
-        border-radius: 50px;
-      }
-      .text {
-        font-size: 2rem;
-        color: #ffffff;
-      }
-    }
-
-    .navbar-header {
-      width: 500px;
-      display: flex;
-      justify-content: space-evenly;
-      gap: 2rem;
-
-      a {
-        font-size: 20px;
-        color: #ffffff;
-        position: sticky;
-      }
-    }
-  }
+.header_tilte {
+  border-radius: 0.5rem;
+  padding: 1.5rem 1rem 1rem 1rem;
 }
 
 .container {
+  max-width: 90%;
+  margin: auto;
+  padding: 2rem;
+  text-align: center;
+  margin-top: 20px;
+}
+
+#tabela-container {
+  margin-top: 2rem;
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+#dados-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background-color: white;
+}
+
+#dados-table thead th {
+  padding: 0.75rem;
+  background-color: #f9fafb;
+  color: #4b5563;
+  font-weight: 600;
+  text-align: left;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+#dados-table tbody td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #f3f4f6;
+  color: #6b7280;
+}
+
+#dados-table tbody tr:hover {
+  background-color: #f0f0f0;
+}
+
+#graficos-container {
   display: flex;
-  justify-content: center;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-top: 2rem;
+  width: fit-content;
+  padding: 1rem;
+}
+
+.grafico-container {
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 2rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  background-color: white;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+.grafico-container h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #374151;
+  text-align: center;
+}
+
+.select-container {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  background-color: #565558;
-  margin: 1rem;
-  height: 80vh;
+  gap: 0.5rem;
+}
+
+.select-container label {
+  font-weight: 500;
+  color: #374151;
+}
+
+.select-container select {
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  width: 200px;
+  max-width: 100%;
+  font-size: 0.875rem;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+}
+
+.select-container select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+#chart-container {
+  width: 100%;
+  height: 300px;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  #graficos-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .grafico-container {
+    width: 100%;
+    max-width: 100%;
+    padding: 1rem;
+  }
+
+  #dados-table {
+    font-size: 0.8rem;
+  }
+
+  #dados-table thead th,
+  #dados-table tbody td {
+    padding: 0.5rem;
+  }
 }
