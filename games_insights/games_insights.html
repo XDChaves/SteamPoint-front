@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dados Steam Spy Insights</title>
+
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com" defer ></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js" defer></script>
+
+    <style>
+        .bbground{
+            background-color: rgb(32, 30, 63);
+        }
+        #titlebar{width: 10%;}
+        #teste {
+            padding: 12px;
+        }
+        #steamSpyTable_length {
+            margin-bottom: 12px;
+        }
+        #steamSpyTable {
+            border: #181a1f 1px solid;
+            border-radius: 1px;
+        }
+        .header_tilte {
+            border-radius: 0.5rem;
+            padding: 1.5rem 1rem 1rem 1rem;
+        }
+        .container {
+            max-width: 90%;
+            margin: auto;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 20px;
+        }
+        #tabela-container {
+            margin-top: 2rem;
+            overflow-x: auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+        #dados-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background-color: white;
+        }
+        #dados-table thead th {
+            padding: 0.75rem;
+            background-color: #f9fafb;
+            color: #4b5563;
+            font-weight: 600;
+            text-align: left;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        #dados-table tbody td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #f3f4f6;
+            color: #6b7280;
+        }
+        #dados-table tbody tr:hover {
+            background-color: #f0f0f0;
+        }
+        #graficos-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-top: 2rem;
+            width: 100%;
+            padding: 1rem;
+        }
+        .grafico-container {
+            width: 100%;
+            margin-bottom: 2rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            background-color: white;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+        }
+        .grafico-container h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #374151;
+            text-align: center;
+        }
+        .select-container {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .select-container label {
+            font-weight: 500;
+            color: #374151;
+        }
+        .select-container select {
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            width: 200px;
+            max-width: 100%;
+            font-size: 0.875rem;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+        }
+        .select-container select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+        #chart-container {
+            width: 100%;
+            height: 500px;
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            #graficos-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .grafico-container {
+                width: 100%;
+                max-width: 100%;
+                padding: 1rem;
+            }
+            #dados-table {
+                font-size: 0.8rem;
+            }
+            #dados-table thead th,
+            #dados-table tbody td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+
+</head>
+
+<body class="bbground">
+    <div class="container mx-auto p-4 bg-white rounded-lg shadow-md mt-8">
+        <div class="header_title">
+            <h1 class="text-2xl font-semibold text-gray-800 mb-4">Dados e Gráficos dos Jogos</h1>
+            <p class="text-gray-600 mb-6">Análise dos dados de desenvolvedores, publishers, idiomas e gêneros dos jogos.</p>
+        </div>
+        <div id="teste" class="rounded-lg shadow-md"  style="width: 100%;">
+            <table id="steamSpyTable" class="display w-full">
+                <thead>
+                    <tr>
+                        <th id="titlebar">App ID</th>
+                        <th id="nameidtitle">name</th>
+                        <th id="nameidtitle">Developer</th>
+                        <th id="nameidtitle">Publisher</th>
+                        <th id="nameidtitle">Languages</th>
+                        <th id="titlebar"></th>Genres</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="graficos-container" class="mt-8" style="width: 100%; display:flex; flex-direction:column;">
+            <div class="grafico-container">
+                <h2 style="margin-bottom: 1rem;">Top 20 Gêneros</h2>
+                <div id="genres-chart-container" class="chart-container" style="height: 600px;">
+                    <canvas id="genres-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="grafico-container">
+                <h2 style="margin-bottom: 1rem;">Top 20 Idiomas</h2>
+                <div id="languages-chart-container" class="chart-container" style="height: 600px;">
+                    <canvas id="languages-chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const apiUrl = 'http://127.0.0.1:5000/steam-games-insights';
+
+        const generosCores = [
+            '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
+            '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf',
+            '#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600',
+            '#6a0dad', '#20c997', '#ff1493', '#cd5c5c', '#40e0d0'
+        ];
+
+        const idiomasCores = [
+            '#264653', '#2a9d8f', '#e9c46a', '#f4a261', '#e76f51',
+            '#d62828', '#f77f00', '#fcbf49', '#eae2b7', '#003049',
+            '#780000', '#606c38', '#283618', '#fefae0', '#dda15e',
+            '#bc6c25', '#118ab2', '#073b4c', '#ffd166', '#06d6a0'
+        ];
+
+
+        async function buscarDadosDaApi() {
+            try {
+                console.log('Tentando buscar dados da API de insights...');
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
+                }
+
+                const dadosJson = await response.json();
+                const dados = dadosJson.data;
+
+                console.log('Dados de insights recebidos da API:', dados);
+                atualizarTabela(dados);
+                criarGraficoGeneros(dados);
+                criarGraficoIdiomas(dados);
+
+            } catch (error) {
+                console.error('Erro ao buscar dados da API de insights:', error);
+                $('#steamSpyTable').html(`<p class="text-red-500">Erro ao carregar os dados: ${error.message}</p>`);
+            }
+        }
+
+
+        function atualizarTabela(dados) {
+            if (dados && dados.length > 0) {
+                if ( $.fn.DataTable.isDataTable('#steamSpyTable') ) {
+                    // Atualiza a tabela já existente com novos dados
+                    $('#steamSpyTable').DataTable().clear().rows.add(dados).draw();
+                } else {
+                    // Cria a tabela se ainda não existe
+                    $('#steamSpyTable').DataTable({
+                        data: dados,
+                        columns: [
+                            { "data": "app_id" },
+                            { "data": "name" },
+                            { "data": "developer" },
+                            { "data": "publisher" },
+                            { "data": "languages" },
+                            { "data": "genres" }
+                        ],
+                        "language": {
+                            "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
+                        },
+                        "responsive": true,
+                        "autoWidth": false,
+                        "deferRender": true
+                    });
+                }
+            } else {
+                $('#steamSpyTable').html('<p class="text-center text-gray-500">Nenhum dado de insights encontrado.</p>');
+            }
+        }
+
+        let genresChartInstance = null;
+        function criarGraficoGeneros(dados) {
+            const generos = {};
+
+            dados.forEach(item => {
+                const genresArray = item.genres.split(',').map(g => g.trim());
+                genresArray.forEach(genre => {
+                    generos[genre] = (generos[genre] || 0) + 1;
+                });
+            });
+
+            const totalSemGenero = generos['\\N'] || 0;
+            delete generos['\\N']; // Remove para não aparecer no gráfico
+
+            const sortedGeneros = Object.entries(generos)
+                .sort(([, a], [, b]) => b - a)
+                .slice(0, 20);
+
+            const labels = sortedGeneros.map(genre => genre[0]);
+            const valores = sortedGeneros.map(genre => genre[1]);
+            const cores = generosCores.slice(0, labels.length); // Usa suas cores fixas
+
+            const ctx = document.getElementById('genres-chart').getContext('2d');
+
+            if (genresChartInstance) {
+                genresChartInstance.destroy();
+            }
+
+            genresChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Número de Jogos',
+                        data: valores,
+                        backgroundColor: cores,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                afterBody: function () {
+                                    return `Sem informação de gênero: ${totalSemGenero}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Número de Jogos' }
+                        },
+                        y: {
+                            ticks: { autoSkip: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        let languagesChartInstance = null;
+        function criarGraficoIdiomas(dados) {
+            const idiomas = {};
+
+            dados.forEach(item => {
+                const languagesArray = item.languages.split(',').map(l => l.trim());
+                languagesArray.forEach(language => {
+                    idiomas[language] = (idiomas[language] || 0) + 1;
+                });
+            });
+
+            const totalSemIdioma = idiomas['\\N'] || 0;
+            delete idiomas['\\N']; // Remove para não aparecer no gráfico
+
+            const sortedIdiomas = Object.entries(idiomas)
+                .sort(([, a], [, b]) => b - a)
+                .slice(0, 20);
+
+            const labels = sortedIdiomas.map(language => language[0]);
+            const valores = sortedIdiomas.map(language => language[1]);
+            const cores = idiomasCores.slice(0, labels.length);
+
+            const ctx = document.getElementById('languages-chart').getContext('2d');
+
+            if (languagesChartInstance) {
+                languagesChartInstance.destroy();
+            }
+
+            languagesChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Número de Jogos',
+                        data: valores,
+                        backgroundColor: cores,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Número de Jogos'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                autoSkip: false,
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: false,
+                            text: 'Top 20 Idiomas'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                afterBody: function () {
+                                    return `Sem informação de idioma: ${totalSemIdioma}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', buscarDadosDaApi);
+    </script>
+
+</body>
+</html>
