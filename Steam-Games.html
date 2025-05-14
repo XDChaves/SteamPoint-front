@@ -18,11 +18,13 @@
     <script src="https://cdn.tailwindcss.com" defer ></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js" defer></script>
-
-    
+  
     <style>
         .bbground{
         background-color: rgb(32, 30, 63);
+        }
+        #titlebar{
+            width: 10%;
         }
         #teste {
             padding: 12px;
@@ -85,7 +87,7 @@
         }
         .grafico-container {
             width: 100%;
-            max-width: 500px;
+            max-width: 650px;
             margin-bottom: 2rem;
             border: 1px solid #e5e7eb;
             border-radius: 0.5rem;
@@ -167,10 +169,10 @@
                 <thead>
                     <tr>
                         <th id="titlebar">App ID</th>
-                        <th id="nameidtitle">Name</th>
-                        <th id="titlebar">Release Date</th>
-                        <th id="titlebar">Is Free</th>
-                        <th id="titlebar">Type</th>
+                        <th>Name</th>
+                        <th>Release Date</th>
+                        <th>Is Free</th>
+                        <th>Type</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -182,11 +184,13 @@
             <div class="grafico-container">
                 <h2 style="margin-bottom: 1rem;">Gráfico de Tipos</h2>
                 <div class="select-container">
+                    
                     <select id="tipo-grafico-tipo">
                         <option value="bar">Gráfico de Barras</option>
                         <option value="pie">Gráfico de Pizza</option>
                         <option value="doughnut">Gráfico de Donut</option>
                     </select>
+                    
                 </div>
                 <div id="tipo-jogo-chart-container" class="chart-container">
                     <canvas id="tipo-jogo-chart"></canvas>
@@ -253,8 +257,18 @@
                 $('#myTable').DataTable({
                     data: dados.data,
                     columns: [
-                        { "data": "app_id" },
-                        { "data": "name" },
+                        {
+                            "data": "app_id",
+                            "render": function (data) {
+                                return '<a href="Detalhes-Game.html?id=' + data + '">' + data + '</a>';
+                            }
+                        },
+                        {
+                            "data": "name",
+                            "render": function (data, type, row) {
+                                return '<a href="Detalhes-Game.html?id=' + row.app_id + '">' + data + '</a>';
+                            }
+                        },
                         { "data": "release_date" },
                         { "data": "is_free" },
                         { "data": "type" }
@@ -265,7 +279,7 @@
                     "responsive": true,
                     "autoWidth": false,
                     "deferRender": true,
-                    "initComplete": function(settings, json) {
+                    "initComplete": function (settings, json) {
                         if (json && json.data && json.data.length > 0) {
                             $('#myTable').find('td').html('');
                         }
@@ -275,6 +289,7 @@
                 $('#myTable').html('<p class="text-center text-gray-500">Nenhum dado encontrado.</p>');
             }
         }
+
 
         let tipoJogoChartInstance = null;
         const tipoJogoCores = ['#1f77b4', '#2ca02c'];
@@ -303,7 +318,7 @@
                     labels: labels,
                     datasets: [{
                         data: valores,
-                        backgroundColor: tipoJogoCores.slice(0, labels.length), // Usa as cores fixas
+                        backgroundColor: tipoJogoCores.slice(0, labels.length),
                         borderWidth: 1
                     }]
                 },
