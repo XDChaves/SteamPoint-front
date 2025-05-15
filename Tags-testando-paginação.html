@@ -4,25 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Dados de Tags da Steam</title>
-
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css"/>
+    <title>testando Tags</title>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
     <link href="/style.css" rel="stylesheet">
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-
+    
     <style>
     body {
-        background-color: rgb(32, 30, 63); /* Cor de fundo */
+        background-color: rgb(32, 30, 63);
     }
 
     .container {
@@ -192,7 +188,6 @@
             padding: 0.5rem;
         }
     }
-
     </style>
     
 </head>
@@ -224,59 +219,41 @@
             </div>
         </div>
     </div>
-
     <script>
-        const apiUrl = 'http://127.0.0.1:5000/tags';
-        let tagChart;
+    const apiUrl = 'http://127.0.0.1:5000/tags-modify';
+    let tagChart;
 
-        async function buscarDadosDaApi() {
-            try {
-                console.log('Tentando buscar dados da API de Tags...');
-                const response = await fetch(apiUrl);
-                if (!response.ok) {
-                    throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
+    $(document).ready(function() {
+        $('#tagsTable').DataTable({
+            "serverSide": true,
+            "ajax": {
+                "url": apiUrl,
+                "type": "GET"
+            },
+            "columns": [{
+                "data": "app_id"
+            }, {
+                "data": "name"
+            }, {
+                "data": "tag"
+            }],
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
+            },
+            "responsive": true,
+            "autoWidth": false,
+            "processing": true,
+            "deferRender": true,
+            "drawCallback": function(settings) {
+                var jsonData = settings.json;
+                if (jsonData && jsonData.data) {
+                    atualizarGrafico(jsonData.data);
                 }
-                const dadosJson = await response.json();
-                const dados = dadosJson.data;
-                console.log('Dados de Tags recebidos da API:', dados);
-                atualizarTabela(dados);
-                atualizarGrafico(dados); // Atualiza o gráfico após carregar os dados
-
-                // Adiciona a classe 'loaded' ao gráfico-container para iniciar a animação
                 setTimeout(() => {
                     document.querySelector('.grafico-container').classList.add('loaded');
-                }, 500); // 500ms de delay para iniciar a animação
-                
-            } catch (error) {
-                console.error('Erro ao buscar dados da API de Tags:', error);
-                $('#tagsTable').html(`<p class="text-red-500">Erro ao carregar os dados: ${error.message}</p>`);
+                }, 500);
             }
-        }
-
-        function atualizarTabela(dados) {
-            if (dados && dados.length > 0) {
-                if ($.fn.DataTable.isDataTable('#tagsTable')) {
-                    $('#tagsTable').DataTable().clear().rows.add(dados).draw();
-                } else {
-                    $('#tagsTable').DataTable({
-                        data: dados,
-                        columns: [
-                            { "data": "app_id" },
-                            { "data": "name" },
-                            { "data": "tag" }
-                        ],
-                        "language": {
-                            "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
-                        },
-                        "responsive": true,
-                        "autoWidth": false,
-                        "deferRender": true
-                    });
-                }
-            } else {
-                $('#tagsTable').html('<p class="text-center text-gray-500">Nenhum dado de categoria encontrado.</p>');
-            }
-        }
+        });
 
         function atualizarGrafico(dados) {
             const tagCounts = {};
@@ -284,18 +261,14 @@
                 tagCounts[item.tag] = (tagCounts[item.tag] || 0) + 1;
             });
 
-            // Converter o objeto de contagem em um array de pares [categoria, frequência]
-            const sortedtags = Object.entries(tagCounts)
-                .sort(([, countA], [, countB]) => countB - countA); // Ordenar por frequência decrescente
-
-            // Pegar apenas as 20 Tags mais frequentes
-            const top20tags = sortedtags.slice(0, 20);
-
-            const labels = top20tags.map(item => item[0]);
-            const counts = top20tags.map(item => item[1]);
+            const sortedTags = Object.entries(tagCounts)
+                .sort(([, countA], [, countB]) => countB - countA);
+            const top20Tags = sortedTags.slice(0, 20);
+            const labels = top20Tags.map(item => item[0]);
+            const counts = top20Tags.map(item => item[1]);
 
             if (tagChart) {
-                tagChart.destroy(); // Destrói o gráfico anterior antes de criar um novo
+                tagChart.destroy();
             }
 
             const ctx = document.getElementById('tagChart').getContext('2d');
@@ -314,7 +287,7 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    animation: { // Adiciona a animação
+                    animation: {
                         duration: 1000,
                         easing: 'easeInOutQuad'
                     },
@@ -334,11 +307,11 @@
                     },
                     plugins: {
                         legend: {
-                            display: false // Oculta a legenda, já que temos apenas um dataset
+                            display: false
                         },
                         title: {
                             display: true,
-                            text: 'Top 20 Tags de Jogos Mais Frequentes',
+                            text: 'Top 20 Tags de Jogos Mais Frequentes (Página Atual)',
                             font: {
                                 size: 16
                             }
@@ -347,8 +320,7 @@
                 }
             });
         }
-
-        document.addEventListener('DOMContentLoaded', buscarDadosDaApi);
+    });
     </script>
 </body>
 

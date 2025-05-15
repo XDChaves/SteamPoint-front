@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Dados de Tags da Steam</title>
+    <title>Dados de reviews da Steam</title>
 
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
@@ -152,14 +152,14 @@
     }
 
     #myTable_length,
-    #tagsTable_length,
+    #reviewsTable_length,
     #steamSpyTable_length,
     #categoriesTable_length {
         margin-bottom: 12px;
     }
 
     #myTable,
-    #tagsTable,
+    #reviewsTable,
     #steamSpyTable,
     #categoriesTable {
         border: #181a1f 1px solid;
@@ -200,70 +200,67 @@
 <body class="bbground">
     <div class="container mx-auto p-4 bg-white rounded-lg shadow-md mt-8">
         <div class="header_title">
-            <h1 class="text-2xl font-semibold text-gray-800 mb-4">Dados de Tags dos Jogos</h1>
-            <p class="text-gray-600 mb-6">Análise das Tags dos jogos da Steam.</p>
+            <h1 class="text-2xl font-semibold text-gray-800 mb-4">Dados de reviews dos Jogos</h1>
+            <p class="text-gray-600 mb-6">Análise das reviews dos jogos da Steam.</p>
         </div>
         <div id="teste" class="rounded-lg shadow-md" style="width: 100%;">
-            <table id="tagsTable" class="display w-full">
+            <table id="reviewsTable" class="display w-full">
                 <thead>
                     <tr>
                         <th id="titlebar">App ID</th>
                         <th>Name</th>
-                        <th>tag</th>
+                        <th>review_score</th>
+                        <th>positive</th>
+                        <th>negative</th>
+                        <th>total</th>
+                        <th>metacritic_score</th>
+                        <th>recommendations</th>
                     </tr>
                 </thead>
                 <tbody>
                 </tbody>
             </table>
         </div>
-        <div id="graficos-container">
-            <div class="grafico-container">
-                <div id="chart-container">
-                    <canvas id="tagChart"></canvas>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script>
-        const apiUrl = 'http://127.0.0.1:5000/tags';
-        let tagChart;
+        const apiUrl = 'http://127.0.0.1:5000/review';
+        let reviewChart;
 
         async function buscarDadosDaApi() {
             try {
-                console.log('Tentando buscar dados da API de Tags...');
+                console.log('Tentando buscar dados da API de reviews...');
                 const response = await fetch(apiUrl);
                 if (!response.ok) {
                     throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
                 }
                 const dadosJson = await response.json();
                 const dados = dadosJson.data;
-                console.log('Dados de Tags recebidos da API:', dados);
+                console.log('Dados de reviews recebidos da API:', dados);
                 atualizarTabela(dados);
-                atualizarGrafico(dados); // Atualiza o gráfico após carregar os dados
-
-                // Adiciona a classe 'loaded' ao gráfico-container para iniciar a animação
-                setTimeout(() => {
-                    document.querySelector('.grafico-container').classList.add('loaded');
-                }, 500); // 500ms de delay para iniciar a animação
                 
             } catch (error) {
-                console.error('Erro ao buscar dados da API de Tags:', error);
-                $('#tagsTable').html(`<p class="text-red-500">Erro ao carregar os dados: ${error.message}</p>`);
+                console.error('Erro ao buscar dados da API de reviews:', error);
+                $('#reviewsTable').html(`<p class="text-red-500">Erro ao carregar os dados: ${error.message}</p>`);
             }
         }
 
         function atualizarTabela(dados) {
             if (dados && dados.length > 0) {
-                if ($.fn.DataTable.isDataTable('#tagsTable')) {
-                    $('#tagsTable').DataTable().clear().rows.add(dados).draw();
+                if ($.fn.DataTable.isDataTable('#reviewsTable')) {
+                    $('#reviewsTable').DataTable().clear().rows.add(dados).draw();
                 } else {
-                    $('#tagsTable').DataTable({
+                    $('#reviewsTable').DataTable({
                         data: dados,
                         columns: [
                             { "data": "app_id" },
                             { "data": "name" },
-                            { "data": "tag" }
+                            { "data": "review_score" },
+                            { "data": "positive" },
+                            { "data": "negative" },
+                            { "data": "total" },
+                            { "data": "metacritic_score" },
+                            { "data": "recommendations" }
                         ],
                         "language": {
                             "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
@@ -274,80 +271,9 @@
                     });
                 }
             } else {
-                $('#tagsTable').html('<p class="text-center text-gray-500">Nenhum dado de categoria encontrado.</p>');
+                $('#reviewsTable').html('<p class="text-center text-gray-500">Nenhum dado de categoria encontrado.</p>');
             }
         }
-
-        function atualizarGrafico(dados) {
-            const tagCounts = {};
-            dados.forEach(item => {
-                tagCounts[item.tag] = (tagCounts[item.tag] || 0) + 1;
-            });
-
-            // Converter o objeto de contagem em um array de pares [categoria, frequência]
-            const sortedtags = Object.entries(tagCounts)
-                .sort(([, countA], [, countB]) => countB - countA); // Ordenar por frequência decrescente
-
-            // Pegar apenas as 20 Tags mais frequentes
-            const top20tags = sortedtags.slice(0, 20);
-
-            const labels = top20tags.map(item => item[0]);
-            const counts = top20tags.map(item => item[1]);
-
-            if (tagChart) {
-                tagChart.destroy(); // Destrói o gráfico anterior antes de criar um novo
-            }
-
-            const ctx = document.getElementById('tagChart').getContext('2d');
-            tagChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Top 20 Tags Mais Frequentes',
-                        data: counts,
-                        backgroundColor: '#7275b5',
-                        borderColor: '#7275b5',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: { // Adiciona a animação
-                        duration: 1000,
-                        easing: 'easeInOutQuad'
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                stepSize: 1
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Tags'
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false // Oculta a legenda, já que temos apenas um dataset
-                        },
-                        title: {
-                            display: true,
-                            text: 'Top 20 Tags de Jogos Mais Frequentes',
-                            font: {
-                                size: 16
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
         document.addEventListener('DOMContentLoaded', buscarDadosDaApi);
     </script>
 </body>
