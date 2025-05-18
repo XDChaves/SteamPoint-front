@@ -13,229 +13,36 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- <link href="/style.css" rel="stylesheet"> -->
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
-    <style>
-        body {
-            background-color: rgb(32, 30, 63);
-            /* Cor de fundo */
-        }
+    <link rel="stylesheet" href="/style.css">
 
-        .container {
-            max-width: 90%;
-            margin: auto;
-            padding: 2rem;
-            text-align: center;
-            margin-top: 20px;
-        }
+    <script type="text/javascript" src="/scriptheader.js"></script>
 
-        .header_tilte {
-            border-radius: 0.5rem;
-            padding: 1.5rem 1rem 1rem 1rem;
-        }
-
-        #tabela-container {
-            margin-top: 2rem;
-            overflow-x: auto;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-            width: 100%;
-        }
-
-        #dados-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-            background-color: white;
-        }
-
-        #dados-table thead th {
-            padding: 0.75rem;
-            background-color: #f9fafb;
-            color: #4b5563;
-            font-weight: 600;
-            text-align: left;
-            border-bottom: 2px solid #e5e7eb;
-        }
-
-        #dados-table tbody td {
-            padding: 0.75rem;
-            border-bottom: 1px solid #f3f4f6;
-            color: #6b7280;
-        }
-
-        #dados-table tbody tr:hover {
-            background-color: #f0f0f0;
-        }
-
-        #graficos-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            margin-top: 2rem;
-            width: 100%;
-            padding: 1rem;
-        }
-
-        .grafico-container {
-            width: 100%;
-            margin-bottom: 2rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            background-color: white;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-        }
-
-        .grafico-container.loaded {
-            opacity: 1;
-        }
-
-        .grafico-container h2 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: #374151;
-            text-align: center;
-        }
-
-        .select-container {
-            margin-top: 1rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .select-container label {
-            font-weight: 500;
-            color: #374151;
-        }
-
-        .select-container select {
-            padding: 0.5rem;
-            border: 1px solid #d1d5db;
-            border-radius: 0.375rem;
-            width: 200px;
-            max-width: 100%;
-            font-size: 0.875rem;
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
-        }
-
-        .select-container select:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-        }
-
-        #chart-container {
-            width: 100%;
-            height: 500px;
-            position: relative;
-        }
-
-        /* Estilos Específicos */
-        #titlebar {
-            width: 10%;
-        }
-
-        #teste {
-            padding: 12px;
-        }
-
-        #myTable_length,
-        #tagsTable_length,
-        #steamSpyTable_length,
-        #categoriesTable_length {
-            margin-bottom: 12px;
-        }
-
-        #myTable,
-        #tagsTable,
-        #steamSpyTable,
-        #categoriesTable {
-            border: #181a1f 1px solid;
-            border-radius: 1px;
-        }
-
-        /* Media Query para Responsividade */
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-
-            #graficos-container {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .grafico-container {
-                width: 100%;
-                max-width: 100%;
-                padding: 1rem;
-            }
-
-            #dados-table {
-                font-size: 0.8rem;
-            }
-
-            #dados-table thead th,
-            #dados-table tbody td {
-                padding: 0.5rem;
-            }
-        }
-
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            /* Cinza claro para a borda estática */
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border-left-color: #7275b5;
-            /* Cor do seu gráfico para a parte que gira */
-            animation: spin 1s ease infinite;
-            margin: 0 auto;
-            /* Centraliza o spinner */
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        #loadingIndicator p {
-            color: #4b5563;
-            /* Cor do texto, similar ao usado nos cabeçalhos da tabela */
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="/header.css">
 
 </head>
 
-<body class="bbground">
+<body>
+    <div id="header-container">
+    </div>
+
+
     <div class="container mx-auto p-4 bg-white rounded-lg shadow-md mt-8">
+        
         <div class="header_title">
             <h1 class="text-2xl font-semibold text-gray-800 mb-4">Dados de Tags dos Jogos</h1>
             <p class="text-gray-600 mb-6">Análise das Tags dos jogos da Steam.</p>
         </div>
-        <div id="teste" class="rounded-lg shadow-md" style="width: 100%;">
-            <table id="tagsTable" class="display w-full">
+
+        <div id="tablebox" class="rounded-lg shadow-md" style="width: 100%;">
+            <table id="myTable" class="display w-full">
                 <thead>
                     <tr>
-                        <th id="titlebar">App ID</th>
+                        <th id="appidtitle">App ID</th>
                         <th>Name</th>
                         <th>tag</th>
                     </tr>
@@ -244,14 +51,16 @@
                 </tbody>
             </table>
         </div>
+        
         <div id="loadingIndicator" style="display:none; text-align:center; padding: 20px;">
             <div class="spinner"></div>
             <p>Carregando dados, por favor aguarde...</p>
         </div>
-        <div id="graficos-container">
-            <div class="grafico-container">
+        
+        <div id="graphics-container">
+            <div class="graphic-box">
                 <div id="chart-container">
-                    <canvas id="tagChart"></canvas>
+                    <canvas id="tagChart" style="height: 50%;"></canvas>
                 </div>
             </div>
         </div>
@@ -278,12 +87,12 @@
                 atualizarGrafico(dados);
 
                 setTimeout(() => {
-                    document.querySelector('.grafico-container').classList.add('loaded');
-                }, 500);
+                    document.querySelector('.graphic-box').classList.add('loaded');
+                }, 1000);
 
             } catch (error) {
                 console.error('Erro ao buscar dados da API de Tags:', error);
-                $('#tagsTable').html(`<p class="text-red-500">Erro ao carregar os dados: ${error.message}</p>`);
+                $('#myTable').html(`<p class="text-red-500">Erro ao carregar os dados: ${error.message}</p>`);
             } finally {
                 setTimeout(() => {
                     loadingIndicator.style.display = 'none';
@@ -293,10 +102,10 @@
 
         function atualizarTabela(dados) {
             if (dados && dados.length > 0) {
-                if ($.fn.DataTable.isDataTable('#tagsTable')) {
-                    $('#tagsTable').DataTable().clear().rows.add(dados).draw();
+                if ($.fn.DataTable.isDataTable('#myTable')) {
+                    $('#myTable').DataTable().clear().rows.add(dados).draw();
                 } else {
-                    $('#tagsTable').DataTable({
+                    $('#myTable').DataTable({
                         data: dados,
                         columns: [
                             { "data": "app_id" },
@@ -312,7 +121,7 @@
                     });
                 }
             } else {
-                $('#tagsTable').html('<p class="text-center text-gray-500">Nenhum dado de categoria encontrado.</p>');
+                $('#myTable').html('<p class="text-center text-gray-500">Nenhum dado de categoria encontrado.</p>');
             }
         }
 
@@ -372,7 +181,7 @@
                     },
                     plugins: {
                         legend: {
-                            display: false // Oculta a legenda, já que temos apenas um dataset
+                            display: false
                         },
                         title: {
                             display: true,

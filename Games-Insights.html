@@ -9,9 +9,10 @@
 
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -19,156 +20,85 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
+    <link rel="stylesheet" href="/style.css">
+
+    <script type="text/javascript" src="/scriptheader.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/header.css">
+    
     <style>
-        .bbground{
-            background-color: rgb(32, 30, 63);
-        }
-        #titlebar{
-            width: 10%;
-        }
-        #teste {
-            padding: 12px;
-        }
-        #steamSpyTable_length {
-            margin-bottom: 12px;
-        }
-        #steamSpyTable {
-            border: #181a1f 1px solid;
-            border-radius: 1px;
-        }
-        .header_tilte {
-            border-radius: 0.5rem;
-            padding: 1.5rem 1rem 1rem 1rem;
-        }
-        .container {
-            max-width: 90%;
-            margin: auto;
-            padding: 2rem;
-            text-align: center;
-            margin-top: 20px;
-        }
-        #tabela-container {
-            margin-top: 2rem;
-            overflow-x: auto;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-            width: 100%;
-        }
-        #dados-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-            background-color: white;
-        }
-        #dados-table thead th {
-            padding: 0.75rem;
-            background-color: #f9fafb;
-            color: #4b5563;
-            font-weight: 600;
-            text-align: left;
-            border-bottom: 2px solid #e5e7eb;
-        }
-        #dados-table tbody td {
-            padding: 0.75rem;
-            border-bottom: 1px solid #f3f4f6;
-            color: #6b7280;
-        }
-        #dados-table tbody tr:hover {
-            background-color: #f0f0f0;
-        }
-        #graficos-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            margin-top: 2rem;
-            width: 100%;
-            padding: 1rem;
-        }
-        .grafico-container {
-            width: 100%;
-            margin-bottom: 2rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            background-color: white;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-        }
-        .grafico-container h2 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: #374151;
-            text-align: center;
-        }
-        .select-container {
-            margin-top: 1rem;
+        #graphics-container2 {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-        .select-container label {
-            font-weight: 500;
-            color: #374151;
-        }
-        .select-container select {
-            padding: 0.5rem;
-            border: 1px solid #d1d5db;
-            border-radius: 0.375rem;
-            width: 200px;
-            max-width: 100%;
-            font-size: 0.875rem;
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
-        }
-        .select-container select:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-        }
-        #chart-container {
+            justify-content: space-around;
+            margin-top: 32px;
             width: 100%;
-            height: 500px;
-            position: relative;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            #graficos-container {
-                flex-direction: column;
-                align-items: center;
-            }
-            .grafico-container {
+            padding: 24px;
+            gap: 24px;
+    
+            .graphic-box {
                 width: 100%;
-                max-width: 100%;
-                padding: 1rem;
+                margin-bottom: 24px;
+                border: 1px solid #e5e7eb;
+                border-radius: 0.5rem;
+                padding: 24px;
+                background-color: white;
+                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+                opacity: 0;
+                transition: opacity 1s ease-in-out;
+                
+                #chart-container {
+                    width: 100%;
+                    height: 500px;
+                    position: relative;
+                }
+
+            }.graphic-box.loaded {
+                opacity: 1;
             }
-            #dados-table {
-                font-size: 0.8rem;
-            }
-            #dados-table thead th,
-            #dados-table tbody td {
-                padding: 0.5rem;
+
+            .graphic-box2 {
+                width: 100%;
+                margin-bottom: 24px;
+                border: 1px solid #e5e7eb;
+                border-radius: 0.5rem;
+                padding: 24px;
+                background-color: white;
+                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+                opacity: 0;
+                transition: opacity 1s ease-in-out;
+                
+                #chart-container {
+                    width: 100%;
+                    height: 500px;
+                    position: relative;
+                }
+
+            }.graphic-box2.loaded {
+                opacity: 1;
             }
         }
     </style>
 
 </head>
 
-<body class="bbground">
+<body>
+    <div id="header-container">
+    </div>
+
+
     <div class="container mx-auto p-4 bg-white rounded-lg shadow-md mt-8">
+        
         <div class="header_title">
             <h1 class="text-2xl font-semibold text-gray-800 mb-4">Dados e Gráficos dos Jogos</h1>
             <p class="text-gray-600 mb-6">Análise dos dados de desenvolvedores, publishers, idiomas e gêneros dos jogos.</p>
         </div>
-        <div id="teste" class="rounded-lg shadow-md"  style="width: 100%;">
-            <table id="steamSpyTable" class="display w-full">
+
+        <div id="tablebox" class="rounded-lg shadow-md"  style="width: 100%;">
+            <table id="myTable" class="display w-full">
                 <thead>
                     <tr>
-                        <th id="titlebar">App ID</th>
+                        <th id="appidtitle">App ID</th>
                         <th>name</th>
                         <th>Developer</th>
                         <th>Publisher</th>
@@ -181,21 +111,25 @@
             </table>
         </div>
 
-        <div id="graficos-container" class="mt-8" style="width: 100%; display:flex; flex-direction:column;">
-            <div class="grafico-container">
-                <h2 style="margin-bottom: 1rem;">Top 20 Gêneros</h2>
-                <div id="genres-chart-container" class="chart-container" style="height: 600px;">
+        <div id="loadingIndicator" style="display:none; text-align:center; padding: 20px;">
+            <div class="spinner"></div>
+            <p>Carregando dados, por favor aguarde...</p>
+        </div>
+
+        <div id="graphics-container2" class="mt-8">
+            <div class="graphic-box">
+                <div id="chart-container" style="height: 600px;">
                     <canvas id="genres-chart"></canvas>
                 </div>
             </div>
 
-            <div class="grafico-container">
-                <h2 style="margin-bottom: 1rem;">Top 20 Idiomas</h2>
-                <div id="languages-chart-container" class="chart-container" style="height: 600px;">
+            <div class="graphic-box2">
+                <div id="chart-container" style="height: 600px;">
                     <canvas id="languages-chart"></canvas>
                 </div>
             </div>
         </div>
+        
     </div>
 
     <script>
@@ -207,7 +141,6 @@
             '#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600',
             '#6a0dad', '#20c997', '#ff1493', '#cd5c5c', '#40e0d0'
         ];
-
         const idiomasCores = [
             '#264653', '#2a9d8f', '#e9c46a', '#f4a261', '#e76f51',
             '#d62828', '#f77f00', '#fcbf49', '#eae2b7', '#003049',
@@ -217,6 +150,8 @@
 
 
         async function buscarDadosDaApi() {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            loadingIndicator.style.display = 'block'; // Mostrar indicador
             try {
                 console.log('Tentando buscar dados da API de insights...');
                 const response = await fetch(apiUrl);
@@ -226,27 +161,38 @@
 
                 const dadosJson = await response.json();
                 const dados = dadosJson.data;
+                console.log('Dados recebidos');
 
-                console.log('Dados de insights recebidos da API:', dados);
                 atualizarTabela(dados);
                 criarGraficoGeneros(dados);
                 criarGraficoIdiomas(dados);
 
+                
+                setTimeout(() => {
+                    document.querySelector('.graphic-box').classList.add('loaded');
+                }, 1000);
+                setTimeout(() => {
+                    document.querySelector('.graphic-box2').classList.add('loaded');
+                }, 1000);
+
             } catch (error) {
                 console.error('Erro ao buscar dados da API de insights:', error);
-                $('#steamSpyTable').html(`<p class="text-red-500">Erro ao carregar os dados: ${error.message}</p>`);
+                $('#myTable').html(`<p class="text-red-500">Erro ao carregar os dados: ${error.message}</p>`);
+            } finally {
+                setTimeout(() => {
+                    loadingIndicator.style.display = 'none';
+                }, 1000);
             }
         }
 
-
         function atualizarTabela(dados) {
             if (dados && dados.length > 0) {
-                if ( $.fn.DataTable.isDataTable('#steamSpyTable') ) {
+                if ( $.fn.DataTable.isDataTable('#myTable') ) {
                     // Atualiza a tabela já existente com novos dados
-                    $('#steamSpyTable').DataTable().clear().rows.add(dados).draw();
+                    $('#myTable').DataTable().clear().rows.add(dados).draw();
                 } else {
                     // Cria a tabela se ainda não existe
-                    $('#steamSpyTable').DataTable({
+                    $('#myTable').DataTable({
                         data: dados,
                         columns: [
                             { "data": "app_id" },
@@ -265,7 +211,7 @@
                     });
                 }
             } else {
-                $('#steamSpyTable').html('<p class="text-center text-gray-500">Nenhum dado de insights encontrado.</p>');
+                $('#myTable').html('<p class="text-center text-gray-500">Nenhum dado de insights encontrado.</p>');
             }
         }
 
@@ -313,14 +259,7 @@
                     maintainAspectRatio: false,
                     indexAxis: 'y',
                     plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                afterBody: function () {
-                                    return `Sem informação de gênero: ${totalSemGenero}`;
-                                }
-                            }
-                        }
+                        legend: { display: false }
                     },
                     scales: {
                         x: {
@@ -329,6 +268,18 @@
                         },
                         y: {
                             ticks: { autoSkip: false }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Top 20 Gêneros',
+                            font: {
+                                size: 16
+                            }
                         }
                     }
                 }
@@ -397,14 +348,10 @@
                             display: false
                         },
                         title: {
-                            display: false,
-                            text: 'Top 20 Idiomas'
-                        },
-                        tooltip: {
-                            callbacks: {
-                                afterBody: function () {
-                                    return `Sem informação de idioma: ${totalSemIdioma}`;
-                                }
+                            display: true,
+                            text: 'Top 20 Idiomas',
+                            font: {
+                                size: 16
                             }
                         }
                     }

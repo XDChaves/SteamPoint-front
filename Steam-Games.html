@@ -9,37 +9,35 @@
 
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-    <script src="https://cdn.tailwindcss.com" defer ></script>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+            
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js" defer></script>
+
+    <script type="text/javascript" src="/scriptheader.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/header.css">
   
     <style>
-        .bbground{
-        background-color: rgb(32, 30, 63);
+        *{
+            font-family: "Roboto", sans-serif;
+            font-size: 1.05rem;
+            font-weight: 500;
         }
-        #titlebar{
-            width: 10%;
+        
+        body{
+            background-image: linear-gradient(to bottom, rgb(32, 30, 63), rgb(0, 0, 0));
         }
-        #teste {
-            padding: 12px;
+
+        tbody{
+            color: #3f3f3f;
         }
-        #myTable_length {
-        margin-bottom: 12px;
-        }
-        #myTable {
-        border: #181a1f 1px solid;
-        border-radius: 1px;
-        }
-        .header_tilte {
-        border-radius: 0.5rem;
-        padding: 1.5rem 1rem 1rem 1rem;
-        }
+
         .container {
             max-width: 90%;
             margin: auto;
@@ -47,128 +45,158 @@
             text-align: center;
             margin-top: 20px;
         }
-        #tabela-container {
-            margin-top: 2rem;
-            overflow-x: auto;
-            border: 1px solid #e5e7eb;
+
+        .header_tilte {
             border-radius: 0.5rem;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-            width: 100%;
+            padding: 24px 16px 0px 16px;
         }
-        #dados-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-            background-color: white;
+        
+        #tablebox {
+            padding: 16px;
+            margin-bottom: 24px;
+            
+            #myTable_length {
+                margin-bottom: 16px;
+                width: fit-content;
+            }
+            #myTable_filter{
+                margin-bottom: 16px;
+                width: 40%;
+                input{
+                    width: 80%;
+                    outline: none;
+                    transition: 0.2s;
+                    padding: 0.2rem 1rem;
+                }
+            }
+            #myTable {
+                border: #181a1f 1px solid;
+                border-radius: 1px;
+                
+                #appidtitle {
+                    width: 10%;
+                }
+            }
         }
-        #dados-table thead th {
-            padding: 0.75rem;
-            background-color: #f9fafb;
-            color: #4b5563;
-            font-weight: 600;
-            text-align: left;
-            border-bottom: 2px solid #e5e7eb;
-        }
-        #dados-table tbody td {
-            padding: 0.75rem;
-            border-bottom: 1px solid #f3f4f6;
-            color: #6b7280;
-        }
-        #dados-table tbody tr:hover {
-            background-color: #f0f0f0;
-        }
-        #graficos-container {
+
+        #graphics-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-around;
             margin-top: 2rem;
             width: 100%;
             padding: 1rem;
+            
+            .graphic-box {
+                width: 100%;
+                max-width: 650px;
+                margin-bottom: 2rem;
+                border: 1px solid #e5e7eb;
+                border-radius: 0.5rem;
+                padding: 1.5rem;
+                background-color: white;
+                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+                
+                h2 {
+                    font-size: 1.25rem;
+                    font-weight: 600;
+                    margin-bottom: 1rem;
+                    color: #374151;
+                    text-align: center;
+                }
+
+            }
+
+            #chart-container {
+                width: 100%;
+                height: 300px;
+                position: relative;
+            }           
         }
-        .grafico-container {
-            width: 100%;
-            max-width: 650px;
-            margin-bottom: 2rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            background-color: white;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+
+        .graphic-box{
+            .select-container {
+                margin-top: 1rem;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+                margin-bottom: 1rem;
+                
+                select {
+                    padding: 0.5rem;
+                    border: 1px solid #d1d5db;
+                    border-radius: 0.375rem;
+                    width: 200px;
+                    max-width: 100%;
+                    font-size: 0.875rem;
+                    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+                }
+                select:focus {
+                    outline: none;
+                    border-color: #3b82f6;
+                    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+                }
+            }
         }
-        .grafico-container h2 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: #374151;
-            text-align: center;
-        }
-        .select-container {
-            margin-top: 1rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-        .select-container label {
-            font-weight: 500;
-            color: #374151;
-        }
-        .select-container select {
-            padding: 0.5rem;
-            border: 1px solid #d1d5db;
-            border-radius: 0.375rem;
-            width: 200px;
-            max-width: 100%;
-            font-size: 0.875rem;
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
-        }
-        .select-container select:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-        }
-        #chart-container {
-            width: 100%;
-            height: 300px;
-            position: relative;
-        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 1rem;
             }
-            #graficos-container {
+
+            #graphics-container {
                 flex-direction: column;
                 align-items: center;
-            }
-            .grafico-container {
-                width: 100%;
-                max-width: 100%;
-                padding: 1rem;
-            }
-            #dados-table {
-                font-size: 0.8rem;
-            }
-            #dados-table thead th,
-            #dados-table tbody td {
-                padding: 0.5rem;
+                
+                .graphic-box {
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 1rem;
+                }
             }
         }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #7275b5;
+            animation: spin 1s ease infinite;
+            margin: 0 auto;
+            color: #4b5563;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
     </style>
 
 </head>
 
-<body class="bbground">
+<body>
+    <div id="header-container">
+    </div>
+
     <div class="container mx-auto p-4 bg-white rounded-lg shadow-md mt-8">
+
         <div class="header_title">
             <h1 class="text-2xl font-semibold text-gray-800 mb-4">Dados e Gráficos dos Jogos</h1>
             <p class="text-gray-600 mb-6">Análise dos dados de desenvolvedores, publishers, idiomas e gêneros dos jogos.</p>
         </div>
-        <div id="teste" class="rounded-lg shadow-md"  style="width: 100%;">
+
+        <div id="tablebox" class="rounded-lg shadow-md"  style="width: 100%;">
             <table id="myTable" class="display w-full">
                 <thead>
                     <tr>
-                        <th id="titlebar">App ID</th>
+                        <th id="appidtitle">App ID</th>
                         <th>Name</th>
                         <th>Release Date</th>
                         <th>Is Free</th>
@@ -180,11 +208,10 @@
             </table>
         </div>
 
-        <div id="graficos-container" class="mt-8" style="width: 100%;">
-            <div class="grafico-container">
+        <div id="graphics-container" class="mt-8" style="width: 100%;">
+            <div class="graphic-box">
                 <h2 style="margin-bottom: 1rem;">Gráfico de Tipos</h2>
-                <div class="select-container">
-                    
+                <div class="select-container">                    
                     <select id="tipo-grafico-tipo">
                         <option value="bar">Gráfico de Barras</option>
                         <option value="pie">Gráfico de Pizza</option>
@@ -197,9 +224,9 @@
                 </div>
             </div>
 
-            <div class="grafico-container">
-                <h2 style="margin-bottom: 1rem;">Jogos Gratuitos vs Pagos</h2>
-                 <div class="select-container">
+            <div class="graphic-box">
+                <h2 style="margin-bottom: 1rem;">Jogos Gratuitos vs Pagos</h2>               
+                <div class="select-container">
                     <select id="tipo-grafico-gratuito">
                         <option value="bar">Gráfico de Barras</option>
                         <option value="pie">Gráfico de Pizza</option>
@@ -212,7 +239,7 @@
             </div>
         </div>
 
-        <div id="graficos-container" class="mt-8" style="width: 100%; margin-bottom: 2rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 1.5rem; background-color: white; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);">
+        <div id="graphics-container" class="mt-8" style="width: 100%; margin-bottom: 2rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 1.5rem; background-color: white; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);">
             <div id="lancamentos-ano-chart-container" class="chart-container" style="width: 100%; height: 400px; position: relative; overflow: hidden;">
                 <canvas id="lancamentos-ano-chart" style="opacity: 0; transition: opacity 1s ease-in-out;"></canvas>
             </div>
@@ -222,7 +249,7 @@
     <script>
         const apiUrl = 'http://127.0.0.1:5000/steam-games';
 
-        async function buscarDadosDaApi() {
+        async function buscarDadosDaApi() {           
             try {
                 console.log('Tentando buscar dados da API...');
                 const response = await fetch(apiUrl);
@@ -230,7 +257,7 @@
                     throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
                 }
                 const dados = await response.json();
-                console.log('Dados recebidos da API:', dados);
+                console.log('Dados recebidos');
                 atualizarTabela(dados);
                 criarGraficoTipos(dados, 'bar');
                 criarGraficoGratuidade(dados, 'bar');
@@ -239,12 +266,10 @@
                 document.getElementById('tipo-grafico-tipo').addEventListener('change', (event) => {
                     criarGraficoTipos(dados, event.target.value);
                 });
-
                 
                 document.getElementById('tipo-grafico-gratuito').addEventListener('change', (event) => {
                     criarGraficoGratuidade(dados, event.target.value);
                 });
-
 
             } catch (error) {
                 console.error('Erro ao buscar dados da API:', error);
@@ -289,7 +314,6 @@
                 $('#myTable').html('<p class="text-center text-gray-500">Nenhum dado encontrado.</p>');
             }
         }
-
 
         let tipoJogoChartInstance = null;
         const tipoJogoCores = ['#1f77b4', '#2ca02c'];

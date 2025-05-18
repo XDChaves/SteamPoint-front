@@ -4,18 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Detalhes do Jogo</title>
+
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css"/>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.tailwindcss.com" defer></script>
    
+
+    <script type="text/javascript" src="/scriptheader.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/header.css">
+
    <style>
+        *{font-family: "Roboto", sans-serif;font-size: 1.05rem;}
+        
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f4f4f5;
-            color: #333;
+            background-color: #333;
             margin: 0;
             padding: 0;
             display: flex;
@@ -24,7 +33,7 @@
             min-height: 100vh;
         }
         .container {
-            background-color: #fff;
+            background-color: #c0c0c0;
             padding: 2rem;
             border-radius: 0.5rem;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -47,6 +56,8 @@
             color: #3b82f6;
             margin-top: 0;
             margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
         }
         .detail-item {
             margin-bottom: 0.5rem;
@@ -58,20 +69,29 @@
         }
         .image-container {
             text-align: center;
-            margin-bottom: 1rem;
-        }
-        .image-container img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 0.25rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            
+            img{
+                border: 3px #ffffff solid;
+                justify-self: center;
+                width: 50%;
+                height: auto;
+                border-radius: 1rem;
+            }
+            
         }
         .back-button {
             display: block;
             text-align: center;
             margin-top: 2rem;
-            color: #3b82f6;
+            background-color: #333;
+            padding: 1rem 2rem;
+            border-radius: 20px;
+            color: #ffffff;
             text-decoration: none;
+            justify-self: center;
+            width: 30%;
+            border: 3px rgb(0, 0, 0) solid;
         }
         .back-button:hover {
             text-decoration: underline;
@@ -85,6 +105,7 @@
             margin-right: 0.25rem;
             margin-bottom: 0.25rem;
             font-size: 0.875rem;
+            
         }
         .category {
             display: inline-block;
@@ -97,15 +118,31 @@
             font-size: 0.875rem;
         }
 
+        #game-name{
+            font-size: 3rem;
+            color: rgb(0, 0, 0);
+            font-weight: bold;
+        }
+        .game-title {
+            color: #f7f7f7;
+            font-weight: bold;
+            font-size: 3rem;
+            text-shadow: 2px 2px 2px 2px #ff0000;
+        }
     </style>
 
 </head>
 
 <body>
+    <div id="header-container">
+    </div>
+
     <div class="container">
         <h1 id="game-name">Detalhes do Jogo</h1>
+        
         <div id="game-details">
-            </div>
+            
+        </div>
         <a href="Steam-Games.html" class="back-button">Voltar para a Lista de Jogos</a>
     </div>
 
@@ -113,7 +150,7 @@
         async function carregarDetalhesDoJogo() {
             const urlParams = new URLSearchParams(window.location.search);
             const appId = urlParams.get('id');
-            const apiUrl = `http://127.0.0.1:5000/game/${appId}`; // Endpoint da API para detalhes do jogo
+            const apiUrl = `http://127.0.0.1:5000/game/${appId}`;
             const gameDetailsContainer = document.getElementById('game-details');
             const gameNameTitle = document.getElementById('game-name');
 
@@ -123,7 +160,7 @@
                     throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
                 }
                 const data = await response.json();
-                console.log('Detalhes do jogo recebidos:', data);
+                console.log('Dados recebidos');
 
                 if (data.error) {
                     gameDetailsContainer.innerHTML = `<p class="text-center text-red-500">${data.error}</p>`;
@@ -131,7 +168,7 @@
                 }
 
                 if (data.game) {
-                    gameNameTitle.textContent = `Detalhes de ${data.game.name}`;
+                    gameNameTitle.innerHTML = `<span class="game-title">${data.game.name}</span>`;
                     let detailsHTML = '';
 
                     // Seção para a imagem de cabeçalho, se disponível
@@ -186,14 +223,10 @@
 
                     // Seção para a imagem de fundo promocional, se disponível
                     if (data.promotional && data.promotional.background_image) {
-                        detailsHTML += `
-                            <div class="detail-section">
-                                <h3>Imagens Promocionais</h3>
-                                <div class="image-container">
-                                    <img src="${data.promotional.background_image}" alt="Background Image">
-                                </div>
-                            </div>
-                        `;
+                        document.body.style.backgroundImage = `url('${data.promotional.background_image}')`;
+                        document.body.style.backgroundSize = 'cover';
+                        document.body.style.backgroundRepeat = 'no-repeat';
+                        document.body.style.backgroundPosition = 'center';
                     }
 
                     // Seção para categorias, se disponíveis
