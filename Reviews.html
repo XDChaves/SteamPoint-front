@@ -4,28 +4,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Dados de reviews da Steam</title>
-
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css"/>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-
-    <link href="/style.css" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-
-    
     <script type="text/javascript" src="/scriptheader.js"></script>
-
     <link rel="stylesheet" type="text/css" href="/header.css">
+    <style>
+        * {
+            font-family: "Roboto", sans-serif;
+            font-size: 1.05rem;
+            font-weight: 450;
+        }
 
+        body {
+            background-color:  rgb(32, 30, 63);
+        }
+
+        tbody {
+            color: #3f3f3f;
+        }
+
+        .container {
+            max-width: 90%;
+            margin: 24px auto 0 auto;
+            /* margem superior padronizada */
+            padding: 24px;
+            text-align: center;
+        }
+
+        .header_title {
+            border-radius: 0.5rem;
+            padding: 24px 16px 0px 16px;
+        }
+
+        #tablebox {
+            padding: 16px;
+            margin-bottom: 24px;
+            max-height: 700px;
+            min-height: 700px;
+
+            #myTable_length {
+                margin-bottom: 16px;
+                width: fit-content;
+            }
+
+            #myTable_filter {
+                margin-bottom: 16px;
+                width: 40%;
+
+                input {
+                    width: 80%;
+                    outline: none;
+                    transition: 0.2s;
+                    padding: 0.2rem 1rem;
+                }
+            }
+
+            #myTable {
+                border: #181a1f 1px solid;
+                border-radius: 1px;
+
+                #appidtitle {
+                    width: 15%;
+                }
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #7275b5;
+            animation: spin 1s ease infinite;
+            margin: 0 auto;
+            color: #4b5563;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        #chartContainer,
+        #chartContainerNegative,
+        #chartContainerPie,
+        #chartContainerRecommendations {
+            width: 100%;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            background-color: white;
+            box-sizing: border-box;
+            display: none;
+        }
+
+        #chartContainer canvas,
+        #chartContainerNegative canvas,
+        #chartContainerPie canvas,
+        #chartContainerRecommendations canvas {
+            display: block;
+            max-height: 400px;
+        }
+    </style>
 </head>
 
 <body>
@@ -63,18 +164,32 @@
             <p>Carregando dados, por favor aguarde...</p>
         </div>
 
-        <div id="graphics-container">
-            <div class="graphic-box">
-                <div id="chart-container">
-                </div>
-            </div>
+        <div id="chartContainer">
+            <canvas id="top10ReviewsChart" width="400" height="200"></canvas>
         </div>
-        
+
+        <div id="chartContainerNegative">
+            <canvas id="top10NegativeReviewsChart" width="400" height="200"></canvas>
+        </div>
+
+        <div id="chartContainerPie">
+            <canvas id="reviewScorePieChart" width="400" height="200"></canvas>
+        </div>
+
+        <div id="chartContainerRecommendations">
+            <canvas id="recommendationsChart" width="400" height="200"></canvas>
+        </div>
+
     </div>
 
     <script>
         const apiUrl = 'http://127.0.0.1:5000/review';
+
         let reviewChart;
+        let reviewNegativeChart;
+        let reviewScorePieChart;
+        let recommendationsChart;
+        let dataTable;
 
         async function buscarDadosDaApi() {
             const loadingIndicator = document.getElementById('loadingIndicator');
@@ -89,7 +204,11 @@
                 const dados = dadosJson.data;
                 console.log('Dados recebidos');
                 atualizarTabela(dados);
-                
+                prepararGrafico(dados); // Chama a função para preparar o gráfico
+                prepararGraficoNegativo(dados);
+                prepararGraficoPieReviewScore(dados);
+                prepararGraficoRecomendacoes(dados);
+
             } catch (error) {
                 console.error('Erro ao buscar dados da API de reviews:', error);
                 $('#myTable').html(`<p class="text-red-500">Erro ao carregar os dados: ${error.message}</p>`);
@@ -103,9 +222,10 @@
         function atualizarTabela(dados) {
             if (dados && dados.length > 0) {
                 if ($.fn.DataTable.isDataTable('#myTable')) {
-                    $('#myTable').DataTable().clear().rows.add(dados).draw();
+                    dataTable = $('#myTable').DataTable();
+                    dataTable.clear().rows.add(dados).draw();
                 } else {
-                    $('#myTable').DataTable({
+                    dataTable = $('#myTable').DataTable({
                         data: dados,
                         columns: [
                             { "data": "app_id" },
@@ -117,6 +237,9 @@
                             { "data": "metacritic_score" },
                             { "data": "recommendations" }
                         ],
+                        "columnDefs": [
+                            { "type": "num", "targets": [3, 4, 5, 7] } // Especifica que as colunas nos índices 3, 4, 5 e 7 são numéricas
+                        ],
                         "language": {
                             "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
                         },
@@ -124,11 +247,290 @@
                         "autoWidth": false,
                         "deferRender": true
                     });
+
+                    // Adiciona o evento de clique aos cabeçalhos APÓS a inicialização do DataTable
+                    $('#myTable thead th').on('click', function() {
+                        var columnIndex = $(this).index();
+
+                        // Remove qualquer filtro existente
+                        dataTable.search('').columns().search('').draw();
+
+                        // Aplica o filtro à coluna clicada para remover linhas com '\N'
+                        dataTable.column(columnIndex).search(
+                            '^((?!\\\\N).)*$',
+                            true,
+                            false
+                        ).draw();
+                    });
                 }
             } else {
                 $('#myTable').html('<p class="text-center text-gray-500">Nenhum dado de categoria encontrado.</p>');
             }
         }
+
+        function prepararGrafico(dados) {
+            // Ordena os dados por número de reviews positivas em ordem decrescente e pega os 10 primeiros
+            const top10Dados = dados.sort((a, b) => b.positive - a.positive).slice(0, 20);
+
+            // Extrai os nomes dos jogos e o número de reviews positivas para usar no gráfico
+            const gameNames = top10Dados.map(jogo => jogo.name);
+            const positiveCounts = top10Dados.map(jogo => jogo.positive);
+
+            // Obtém o contexto do canvas onde o gráfico será renderizado
+            const ctx = document.getElementById('top10ReviewsChart').getContext('2d');
+            document.getElementById('chartContainer').style.display = 'block';
+
+
+            // Cria o gráfico de barras
+            reviewChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: gameNames,
+                    datasets: [{
+                        label: 'Top 10 Jogos por Reviews Positivas',
+                        data: positiveCounts,
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.8)', // Azul
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Top 10 Jogos por Reviews Positivas',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function (value) {
+                                    return value; // converte o valor para string
+                                }
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                autoSkip: false, // Garante que todos os rótulos sejam exibidos
+                                maxRotation: 50, // Ajusta a rotação dos rótulos
+                                minRotation: 50
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function prepararGraficoNegativo(dados) {
+            // Ordena os dados por número de reviews negativas em ordem decrescente e pega os 10 primeiros
+            const top10DadosNegativos = dados.sort((a, b) => b.negative - a.negative).slice(0, 20);
+
+            // Extrai os nomes dos jogos e o número de reviews negativas para usar no gráfico
+            const gameNamesNegativos = top10DadosNegativos.map(jogo => jogo.name);
+            const negativeCounts = top10DadosNegativos.map(jogo => jogo.negative);
+
+            // Obtém o contexto do canvas onde o gráfico será renderizado
+            const ctxNegative = document.getElementById('top10NegativeReviewsChart').getContext('2d');
+            document.getElementById('chartContainerNegative').style.display = 'block';
+
+            // Cria o gráfico de barras para reviews negativas
+            reviewNegativeChart = new Chart(ctxNegative, {
+                type: 'bar',
+                data: {
+                    labels: gameNamesNegativos,
+                    datasets: [{
+                        label: 'Top 10 Jogos por Reviews Negativas',
+                        data: negativeCounts,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.8)', // Vermelho
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Top 10 Jogos por Reviews Negativas',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function (value) {
+                                    return value;
+                                }
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                autoSkip: false,
+                                maxRotation: 50,
+                                minRotation: 50
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+
+        function prepararGraficoPieReviewScore(dados) {
+            // Agrupa os dados por review_score e conta a quantidade de jogos em cada score
+            const reviewScoreCounts = {};
+            dados.forEach(jogo => {
+                const score = jogo.review_score;
+                if (reviewScoreCounts[score]) {
+                    reviewScoreCounts[score]++;
+                } else {
+                    reviewScoreCounts[score] = 1;
+                }
+            });
+
+            // Extrai os scores e as contagens para usar no gráfico
+            const scores = Object.keys(reviewScoreCounts);
+            const counts = Object.values(reviewScoreCounts);
+
+            // Obtém o contexto do canvas
+            const ctxPie = document.getElementById('reviewScorePieChart').getContext('2d');
+            document.getElementById('chartContainerPie').style.display = 'block';
+
+            // Define as cores para o gráfico de pizza
+            const backgroundColors = [
+                'rgba(255, 99, 132, 0.8)',
+                'rgba(54, 162, 235, 0.8)',
+                'rgba(255, 206, 86, 0.8)',
+                'rgba(75, 192, 192, 0.8)',
+                'rgba(153, 102, 255, 0.8)',
+                'rgba(255, 159, 64, 0.8)',
+                'rgba(199, 232, 90, 0.8)',
+                'rgba(240, 128, 128, 0.8)',
+                'rgba(70, 130, 180, 0.8)',
+                'rgba(244, 164, 96, 0.8)'
+            ];
+
+            // Cria o gráfico de pizza
+            reviewScorePieChart = new Chart(ctxPie, {
+                type: 'pie',
+                data: {
+                    labels: scores,
+                    datasets: [{
+                        label: 'Distribuição de Jogos por Review Score',
+                        data: counts,
+                        backgroundColor: backgroundColors,
+                        borderWidth: 1,
+                        borderColor: 'rgba(255, 255, 255, 1)',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Distribuição de Jogos por Review Score',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        legend: {
+                            position: 'top'
+                        }
+                    }
+                }
+            });
+        }
+
+        function prepararGraficoRecomendacoes(dados) {
+            // Ordena os dados por número de recomendações em ordem decrescente e pega os 10 primeiros
+            const top10Recomendacoes = dados.sort((a, b) => b.recommendations - a.recommendations).slice(0, 20);
+
+            // Extrai os nomes dos jogos e o número de recomendações para usar no gráfico
+            const gameNamesRecomendacoes = top10Recomendacoes.map(jogo => jogo.name);
+            const recomendacoesCounts = top10Recomendacoes.map(jogo => jogo.recommendations);
+
+            // Obtém o contexto do canvas
+            const ctxRecomendacoes = document.getElementById('recommendationsChart').getContext('2d');
+            document.getElementById('chartContainerRecommendations').style.display = 'block';
+
+            // Cria o gráfico de barras para recomendações
+            recommendationsChart = new Chart(ctxRecomendacoes, {
+                type: 'bar',
+                data: {
+                    labels: gameNamesRecomendacoes,
+                    datasets: [{
+                        label: 'Top 10 Jogos por Recomendações',
+                        data: recomendacoesCounts,
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.8)', // Verde água
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)',
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Top 10 Jogos por Recomendações',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function (value) {
+                                    return value;
+                                }
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                autoSkip: false,
+                                maxRotation: 50,
+                                minRotation: 50
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', buscarDadosDaApi);
     </script>
 </body>

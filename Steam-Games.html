@@ -31,7 +31,7 @@
         }
         
         body{
-            background-image: linear-gradient(to bottom, rgb(32, 30, 63), rgb(0, 0, 0));
+            background-color:  rgb(32, 30, 63);
         }
 
         tbody{
@@ -54,7 +54,9 @@
         #tablebox {
             padding: 16px;
             margin-bottom: 24px;
-            
+            max-height: 700px;
+            min-height: 700px;
+
             #myTable_length {
                 margin-bottom: 16px;
                 width: fit-content;
@@ -248,6 +250,7 @@
 
     <script>
         const apiUrl = 'http://127.0.0.1:5000/steam-games';
+        let dataTable;
 
         async function buscarDadosDaApi() {           
             try {
@@ -279,37 +282,56 @@
 
         function atualizarTabela(dados) {
             if (dados && dados.data && dados.data.length > 0) {
-                $('#myTable').DataTable({
-                    data: dados.data,
-                    columns: [
-                        {
-                            "data": "app_id",
-                            "render": function (data) {
-                                return '<a href="Detalhes-Game.html?id=' + data + '">' + data + '</a>';
-                            }
+                if ($.fn.DataTable.isDataTable('#myTable')) {
+                    dataTable = $('#myTable').DataTable();
+                    dataTable.clear().rows.add(dados.data).draw();
+                } else {
+                    dataTable = $('#myTable').DataTable({
+                        data: dados.data,
+                        columns: [
+                            {
+                                "data": "app_id",
+                                "render": function (data) {
+                                    return '<a href="Detalhes-Game.html?id=' + data + '">' + data + '</a>';
+                                }
+                            },
+                            {
+                                "data": "name",
+                                "render": function (data, type, row) {
+                                    return '<a href="Detalhes-Game.html?id=' + row.app_id + '">' + data + '</a>';
+                                }
+                            },
+                            { "data": "release_date" },
+                            { "data": "is_free" },
+                            { "data": "type" }
+                        ],
+                        "language": {
+                            "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
                         },
-                        {
-                            "data": "name",
-                            "render": function (data, type, row) {
-                                return '<a href="Detalhes-Game.html?id=' + row.app_id + '">' + data + '</a>';
+                        "responsive": true,
+                        "autoWidth": false,
+                        "deferRender": true,
+                        "initComplete": function (settings, json) {
+                            if (json && json.data && json.data.length > 0) {
+                                $('#myTable').find('td').html('');
                             }
-                        },
-                        { "data": "release_date" },
-                        { "data": "is_free" },
-                        { "data": "type" }
-                    ],
-                    "language": {
-                        "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
-                    },
-                    "responsive": true,
-                    "autoWidth": false,
-                    "deferRender": true,
-                    "initComplete": function (settings, json) {
-                        if (json && json.data && json.data.length > 0) {
-                            $('#myTable').find('td').html('');
+                            // Adiciona o evento de clique aos cabeçalhos APÓS a inicialização do DataTable
+                            $('#myTable thead th').on('click', function() {
+                                var columnIndex = $(this).index();
+
+                                // Remove qualquer filtro existente
+                                dataTable.search('').columns().search('').draw();
+
+                                // Aplica o filtro à coluna clicada para remover linhas com '\N'
+                                dataTable.column(columnIndex).search(
+                                    '^((?!\\\\N).)*$',
+                                    true,
+                                    false
+                                ).draw();
+                            });
                         }
-                    }
-                });
+                    });
+                }
             } else {
                 $('#myTable').html('<p class="text-center text-gray-500">Nenhum dado encontrado.</p>');
             }

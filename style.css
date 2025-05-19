@@ -5,7 +5,7 @@
 }
 
 body{
-    background-image: linear-gradient(to bottom, rgb(32, 30, 63), rgb(0, 0, 0));
+    background-color:  rgb(32, 30, 63);
 }
 
 tbody{
@@ -27,6 +27,8 @@ tbody{
 #tablebox {
     padding: 16px;
     margin-bottom: 24px;
+    max-height: 700px;
+    min-height: 700px;
             
     #myTable_length {
         margin-bottom: 16px;

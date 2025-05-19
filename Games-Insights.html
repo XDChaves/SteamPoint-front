@@ -134,7 +134,8 @@
 
     <script>
         const apiUrl = 'http://127.0.0.1:5000/steam-games-insights';
-
+        let dataTable;
+        
         const generosCores = [
             '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
             '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf',
@@ -187,12 +188,11 @@
 
         function atualizarTabela(dados) {
             if (dados && dados.length > 0) {
-                if ( $.fn.DataTable.isDataTable('#myTable') ) {
-                    // Atualiza a tabela já existente com novos dados
-                    $('#myTable').DataTable().clear().rows.add(dados).draw();
+                if ($.fn.DataTable.isDataTable('#myTable')) {
+                    dataTable = $('#myTable').DataTable();
+                    dataTable.clear().rows.add(dados).draw();
                 } else {
-                    // Cria a tabela se ainda não existe
-                    $('#myTable').DataTable({
+                    dataTable = $('#myTable').DataTable({
                         data: dados,
                         columns: [
                             { "data": "app_id" },
@@ -207,7 +207,23 @@
                         },
                         "responsive": true,
                         "autoWidth": false,
-                        "deferRender": true
+                        "deferRender": true,
+                        "initComplete": function (settings, json) {
+                            // Adiciona o evento de clique aos cabeçalhos APÓS a inicialização do DataTable
+                            $('#myTable thead th').on('click', function() {
+                                var columnIndex = $(this).index();
+
+                                // Remove qualquer filtro existente
+                                dataTable.search('').columns().search('').draw();
+
+                                // Aplica o filtro à coluna clicada para remover linhas com '\N'
+                                dataTable.column(columnIndex).search(
+                                    '^((?!\\\\N).)*$',
+                                    true,
+                                    false
+                                ).draw();
+                            });
+                        }
                     });
                 }
             } else {
