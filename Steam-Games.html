@@ -76,7 +76,10 @@
                 border-radius: 1px;
                 
                 #appidtitle {
-                    width: 10%;
+                    width: 15%;
+                }
+                #nameidtitle{
+                    width: 25%;
                 }
             }
         }
@@ -190,8 +193,10 @@
     <div class="container mx-auto p-4 bg-white rounded-lg shadow-md mt-8">
 
         <div class="header_title">
-            <h1 class="text-2xl font-semibold text-gray-800 mb-4">Dados e Gráficos dos Jogos</h1>
-            <p class="text-gray-600 mb-6">Análise dos dados de desenvolvedores, publishers, idiomas e gêneros dos jogos.</p>
+            <h1 class="text-2xl font-semibold text-gray-800 mb-4">Softwares da Plataforma Steam</h1>
+            <h3 class="text-gray-600 mb-6">Dados sobre data de lançamento, gratuidade e tipo de app.</h3>
+            <p class="text-gray-600 mb-6">*Os dados vão até 2024 e muitos tiveram que ser removidos por processos de filtragem<br>
+                logo não representa atualmente todos os softwares disponiveis na Steam.*</p>
         </div>
 
         <div id="tablebox" class="rounded-lg shadow-md"  style="width: 100%;">
@@ -199,10 +204,10 @@
                 <thead>
                     <tr>
                         <th id="appidtitle">App ID</th>
-                        <th>Name</th>
-                        <th>Release Date</th>
-                        <th>Is Free</th>
-                        <th>Type</th>
+                        <th id="nameidtitle">Name</th>
+                        <th id="appidtitle">Data de lançamento</th>
+                        <th id="appidtitle">Gratuidade</th>
+                        <th id="appidtitle">Tipo</th>
                     </tr>
                 </thead>
                 <tbody>

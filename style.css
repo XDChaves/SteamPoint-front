@@ -52,6 +52,9 @@ tbody{
         #appidtitle {
             width: 10%;
         }
+        #nameidtitle{
+            width: 30%;
+        }
     }
 }
 
