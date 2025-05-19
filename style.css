@@ -48,10 +48,10 @@ tbody{
         border-radius: 1px;
                 
         #appidtitle {
-            width: 10%;
+            width: 8%;
         }
         #nameidtitle{
-            width: 30%;
+            width: 20%;
         }
     }
 }
@@ -112,6 +112,7 @@ tbody{
             margin-bottom: 16px;
         }
     }
+    
 }
 
 .spinner {

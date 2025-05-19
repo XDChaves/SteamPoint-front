@@ -17,7 +17,7 @@
         justify-content: space-between;
         font-weight: 700;
 
-        .logo-header {
+        #logo-header {
             display: flex;
             align-items: center;
 
@@ -46,6 +46,18 @@
             a:hover{
                 transition: 0.5s;
                 text-decoration: 2px underline;
+            }
+        }
+    }
+}
+
+@media (max-width: 1380px){
+    #header-container{
+        #logo-header {
+            display: none;
+
+            .text {
+                opacity: 0;
             }
         }
     }
