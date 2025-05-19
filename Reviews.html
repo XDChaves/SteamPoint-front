@@ -4,20 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Dados de reviews da Steam</title>
+
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+   
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="/scriptheader.js"></script>
+    
     <link rel="stylesheet" type="text/css" href="/header.css">
-    <style>
+   
+   <style>
         * {
             font-family: "Roboto", sans-serif;
             font-size: 1.05rem;
@@ -204,12 +208,25 @@
                 }
                 const dadosJson = await response.json();
                 const dados = dadosJson.data;
-                console.log('Dados recebidos');
-                atualizarTabela(dados);
-                prepararGrafico(dados); // Chama a função para preparar o gráfico
-                prepararGraficoNegativo(dados);
-                prepararGraficoPieReviewScore(dados);
-                prepararGraficoRecomendacoes(dados);
+
+                // Converte os valores para número, se necessário
+                const dadosCorrigidos = dados.map(item => ({
+                    app_id: Number(item.app_id),
+                    name: item.name,
+                    review_score: Number(item.review_score),
+                    positive: Number(item.positive),
+                    negative: Number(item.negative),
+                    total: Number(item.total),
+                    metacritic_score: Number(item.metacritic_score),
+                    recommendations: Number(item.recommendations)
+                }));
+
+                console.log('Dados corrigidos recebidos');
+                atualizarTabela(dadosCorrigidos);
+                prepararGrafico(dadosCorrigidos);
+                prepararGraficoNegativo(dadosCorrigidos);
+                prepararGraficoPieReviewScore(dadosCorrigidos);
+                prepararGraficoRecomendacoes(dadosCorrigidos);
 
             } catch (error) {
                 console.error('Erro ao buscar dados da API de reviews:', error);
@@ -240,29 +257,28 @@
                             { "data": "recommendations" }
                         ],
                         "columnDefs": [
-                            { "type": "num", "targets": [3, 4, 5, 7] } // Especifica que as colunas nos índices 3, 4, 5 e 7 são numéricas
+                            { "type": "num", "targets": [0, 2, 3, 4, 5, 6, 7] } // Colunas nos índices 3, 4, 5 e 7 são numéricas
                         ],
                         "language": {
                             "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
                         },
                         "responsive": true,
                         "autoWidth": false,
-                        "deferRender": true
-                    });
-
-                    // Adiciona o evento de clique aos cabeçalhos APÓS a inicialização do DataTable
-                    $('#myTable thead th').on('click', function() {
-                        var columnIndex = $(this).index();
-
-                        // Remove qualquer filtro existente
-                        dataTable.search('').columns().search('').draw();
-
-                        // Aplica o filtro à coluna clicada para remover linhas com '\N'
-                        dataTable.column(columnIndex).search(
-                            '^((?!\\\\N).)*$',
-                            true,
-                            false
-                        ).draw();
+                        "deferRender": true,
+                        "initComplete": function (settings, json) {
+                            // Adiciona o evento de clique aos cabeçalhos APÓS a inicialização do DataTable
+                            $('#myTable thead th').on('click', function () {
+                                var columnIndex = $(this).index();
+                                // Remove qualquer filtro existente
+                                dataTable.search('').columns().search('').draw();
+                                // Aplica o filtro à coluna clicada para remover linhas com '\N'
+                                dataTable.column(columnIndex).search(
+                                    '^((?!\\\\N).)*$',
+                                    true,
+                                    false
+                                ).draw();
+                            });
+                        }
                     });
                 }
             } else {
@@ -400,7 +416,6 @@
                 }
             });
         }
-
 
         function prepararGraficoPieReviewScore(dados) {
             // Agrupa os dados por review_score e conta a quantidade de jogos em cada score

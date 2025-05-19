@@ -124,12 +124,10 @@
                         "deferRender": true,
                         "initComplete": function (settings, json) {
                             // Adiciona o evento de clique aos cabeçalhos APÓS a inicialização do DataTable
-                            $('#myTable thead th').on('click', function() {
+                            $('#myTable thead th').on('click', function () {
                                 var columnIndex = $(this).index();
-
                                 // Remove qualquer filtro existente
                                 dataTable.search('').columns().search('').draw();
-
                                 // Aplica o filtro à coluna clicada para remover linhas com '\N'
                                 dataTable.column(columnIndex).search(
                                     '^((?!\\\\N).)*$',
