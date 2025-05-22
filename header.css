@@ -1,64 +1,76 @@
-#header-container{
-    z-index: 3;
-    position: sticky;
+header{
+    position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    box-shadow: 0 3px 5px rgb(10, 10, 10);
-    background-color: #080016;
-    padding: 0.5rem 4rem;
     width: 100%;
-    height: 6.25rem;
-}
-#main-header {
-    nav {
+    z-index: 10;
+    height: 100px;
+    overflow: hidden;
+    padding: 0 24px;
+    background: linear-gradient(to bottom, rgb(0, 0, 0),rgba(253, 253, 253, 0));
+
+    a{
+        color: #fff;
+    }
+
+    nav{
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        font-weight: 700;
-
-        #logo-header {
+        height: 80%;
+    
+        #logocontent{
+            text-transform: uppercase;
             display: flex;
             align-items: center;
+            z-index: 3;
 
-            img {
-                width: 5rem;
-                height: auto;
-                border-radius: 50px;
+            .titlelogo{
+                display: inline-flex;
+                align-items: center;
+                font-size: 40px;
+                font-weight: bold ;
             }
-            .text {
-                font-size: 2rem;
-                color: #ffffff;
+            .titlelogo:hover{
+                transition: 4s;
+                color: rgb(255, 206, 45);
+                transition: all 1s ease;
+                font-weight: bold ;
             }
+
         }
 
-        .navbar-header {
+        .navbar{
+            position: absolute;
+            left: 0;
+            width:100%;
+            justify-content: center;
+            list-style: none;
             display: flex;
-            justify-content: space-evenly;
-            gap: 3rem;
-
-            a {
-                font-size: 20px;
-                color: #ffffff;
-                position: sticky;
-                transition: 0.5s;
+            gap: 1vw;
+                    
+            li{
+                font-size: clamp(0.6rem, -2.5rem + 5vw, 1rem);
+                letter-spacing: 3px;
+                background-color: black;
+                width: fit-content;
+                border-radius: 20px;
+                align-self: center;
+                border: 2px rgb(0, 0, 0) solid;
+                display: flex;
+                justify-content: center;
+                padding: 0 1rem;
+                transition: all 0.5s ease;
             }
-            a:hover{
-                transition: 0.5s;
-                text-decoration: 2px underline;
+            li:hover{
+                cursor: pointer;
+                border: 2px antiquewhite solid;
+                transform: scale(1.15);
+                text-shadow: #fff 0px 0px 10px;
             }
         }
     }
 }
-
-@media (max-width: 1380px){
-    #header-container{
-        #logo-header {
-            display: none;
-
-            .text {
-                opacity: 0;
-            }
-        }
-    }
+header.scrolled-header {
+    height: 100px;
+    background: linear-gradient(to bottom, rgb(0, 0, 0), rgb(0, 0, 0), rgb(0, 0, 0), rgba(0, 0, 0, 0.945), rgba(0, 0, 0, 0.863),rgba(253, 253, 253, 0));
 }

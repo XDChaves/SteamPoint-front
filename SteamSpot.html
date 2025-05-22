@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SteamSpot</title>
+
+    <link rel="stylesheet" href="/spotstyle.css">
+    <script type="text/javascript" src="/steamspot.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <style>
+        .fa-circle-up.rotate-180 {
+            transform: rotate(180deg);
+            transition: transform 0.5s ease;
+        }
+
+        .text-container{
+            font-family: "Roboto", sans-serif;
+            height: 100%;
+            background-image: linear-gradient(to left, rgb(0, 18, 34),rgb(0, 19, 36),rgb(0, 18, 34));
+            border-bottom: 2px white solid;
+            padding: 20px 2vw;
+            display: flex;
+            gap: 1vw;
+
+            #box{
+                padding: 40px 3vw;
+                background-color: rgba(255, 255, 255, 0.082);
+                height: 100%;
+                width: 50%;
+                border-radius: 1vw;
+                color: white;
+                box-shadow: white 0px 0px 0.1vw;
+
+                h1{
+                    text-align: center;
+                    font-size: clamp(1rem, -1.5rem + 4vw, 2rem);
+                    margin-bottom: 2rem;
+                }
+                p{
+                    display: flex;
+                    font-size: clamp(1rem, -1.5rem + 4vw, 1.5rem);
+                    text-align: justify;
+                }
+                ul{
+                    justify-content: space-around;
+                    font-size: clamp(1rem, -1.5rem + 4vw, 1.5rem);
+                    text-align: justify;
+                    color: rgb(255, 255, 255);
+                    line-height: 2;
+                }
+            }
+        }
+
+        .secondcontainer{
+            font-family: "Roboto", sans-serif;
+            padding: 0 3vw;
+            border-bottom: 2px white solid;
+
+            h1 {
+                color: #ffffff; 
+                text-align: center; 
+                margin: 1.5rem 0;
+                font-size: clamp(1rem, -1.5rem + 4vw, 3rem);
+            }
+            .header-content{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 1vw;
+
+                .fa-solid{
+                    cursor: pointer;
+                    transition: all 0.5s ease;
+                    color: #ffffff;
+                }
+
+            }
+            .header-content:hover{
+                cursor: pointer;
+
+                .fa-circle-up{
+                    color: rgb(56, 215, 255);
+                    transform: rotate(90deg);
+                }
+            }
+
+            .error-message{
+                color: #c1c1c1;
+                justify-self: center;
+            }
+        }
+        section:hover{transition: all 1s;background-image: linear-gradient(to left, rgb(0, 18, 34),rgb(2, 55, 102),rgb(0, 18, 34));}
+
+        #game-list {
+            display: block;
+            list-style: none;
+        
+            li:last-child {
+                border-bottom: none;
+            }
+            li {
+                padding: 15px 20px;
+                border-bottom: 1px solid #eee;
+                border-top: 1px solid #eee;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                font-size: clamp(0.5rem, -1.5rem + 3vw, 1.5rem);
+        
+                .game-info {
+                    display: flex;
+                    align-items: center;
+                    flex-grow: 1;
+                }
+                .rank {
+                    font-weight: bold;
+                    color: #64abdb;
+                    margin-right: 15px;
+                    min-width: 30px;
+                    text-align: right;
+                }
+                .game-name {
+                    font-weight: bold;
+                    color: #ffffff;
+                    flex-grow: 1;
+                }
+                .player-counts {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-end;
+                }
+                .current-players{
+                    color: #ffc0c0;
+                    margin-top: 5px;
+                }
+
+                .daily-peak {
+                    color: #c0fbff;
+                    margin-top: 5px;
+                }
+                a {
+                    text-decoration: none;
+                    color: inherit;
+                }
+                a:hover {
+                    color: #3cb1ff;
+                }
+            }
+
+        }
+
+        .thirdcontainer{
+            font-family: "Roboto", sans-serif;
+            padding: 0 3vw;
+            border-bottom: 2px white solid;
+
+            h1 {
+                color: #ffffff; 
+                text-align: center; 
+                margin: 1.5rem 0;
+                font-size: clamp(1rem, -1.5rem + 4vw, 3rem);
+            }
+            .header-content{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 1vw;
+
+                .fa-solid{
+                    cursor: pointer;
+                    transition: all 0.5s ease;
+                    color: #ffffff;
+                }
+
+            }
+            .header-content:hover{
+                cursor: pointer;
+
+                .fa-circle-up{
+                    color: rgb(56, 215, 255);
+                    transform: rotate(90deg);
+                }
+            }
+
+            .error-message{
+                color: #c1c1c1;
+                justify-self: center;
+            }
+        }
+        
+    </style>
+
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a id="logocontent" href="">
+                <img src="/imgs/xsteamlog.png" style="height: 80px;">
+                <div class="titlelogo"><h3>S</h3><h4>team</h4><h3>S</h3><h4>pot</h4><h3>S</h3></div>
+            </a>
+
+            <ul class="navbar">
+                <li><a href=""> GRAPHICS </a></li>
+                <li><a href=""> PAGES </a></li>
+                <li><a href=""> ABOUT </a></li>
+            </ul>
+
+        </nav>
+    </header>
+
+    <main>
+        <section class="firstcontainer">     
+            <div class="slidebox">
+                <div class="backgroundtext">
+                    <div class="textabout">
+                        <h1></h1>
+                        <p></p>
+                    </div>          
+                </div>
+            </div>
+
+            <div class="carouselbuttons">
+                <div class="carousel-controls">
+                                <input type="radio" name="carousel" id="slide1" class="carousel-radio" data-index="0">
+                                <label for="slide1"></label>
+                            
+                                <input type="radio" name="carousel" id="slide2" class="carousel-radio" data-index="1">
+                                <label for="slide2"></label>
+                            
+                                <input type="radio" name="carousel" id="slide3" class="carousel-radio" data-index="2">
+                                <label for="slide3"></label>
+                            
+                                <input type="radio" name="carousel" id="slide4" class="carousel-radio" data-index="3">
+                                <label for="slide4"></label>
+                            
+                                <input type="radio" name="carousel" id="slide5" class="carousel-radio" data-index="4">
+                                <label for="slide5"></label>
+                            
+                                <input type="radio" name="carousel" id="slide6" class="carousel-radio" data-index="5">
+                                <label for="slide6"></label>
+                </div>
+            </div>
+        </section>
+
+        <div class="text-container">
+            <div id="box" class="box1">
+                <h1>Existe uma fórmula do Sucesso?</h1>
+                <p>Não existe uma "fórmula mágica" mas há padrões e características recorrentes nos jogos que alcançam e mantêm o sucesso na Steam.</p>
+                <br>
+                <ul>
+                    <li>Excelência e Qualidade Inegável</li>
+                    <li>Profundidade e Conteúdo Massivo</li>
+                    <li>Forte Engajamento da Comunidade</li>
+                    <li>Relevância em seus Respectivos Gêneros</li>
+                    <li>Atualizações Constantes e/ou Conteúdo Gerado pelo Usuário</li>
+                </ul>
+            </div>
+            <div id="box" class="box2">
+                <h1></h1>
+                <p></p>
+            </div>
+        </div>
+
+        <section class="secondcontainer">
+            <div class="header-content">
+                <i id="toggle-icon" class="fa-solid fa-circle-up" style="font-size: clamp(2rem, -1.5rem + 4vw, 5rem);"></i>
+                <h1>Top 10 Acessados da Steam Atualmente</h1>
+            </div>
+
+            <ul id="game-list" style="display: none;">
+            </ul>
+        </section>
+
+        <section class="thirdcontainer">
+            <div class="header-content">
+                <i id="toggle-icon" class="fa-solid fa-circle-up" style="font-size: clamp(2rem, -1.5rem + 4vw, 5rem);"></i>
+                <h1>Top 10 </h1>
+            </div>
+
+            <ul id="" style="display: none;">
+            </ul>
+        </section>
+
+
+    </main>
+    
+    <footer>
+
+    </footer>
+
+    <script>
+        async function fetchTopGames() {
+            try {
+                const response = await fetch('http://localhost:5000/api/top-games');
+
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP! status: ${response.status}`);
+                }
+                const games = await response.json();
+                displayGames(games);
+            } catch (error) {
+                const gameList = document.getElementById('game-list');
+                gameList.innerHTML = '<li class="error-message">Erro ao carregar a lista. Tente novamente mais tarde.</li>';
+            }
+        }
+
+        function displayGames(games) {
+            const gameList = document.getElementById('game-list');
+            gameList.innerHTML = '';
+            
+            games.forEach(game => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <div class="game-info">
+                        <span class="rank">${game.rank}.</span>
+                        <a href="${game.game_url}" target="_blank" class="game-name">${game.name}</a>
+                    </div>
+                    <div class="player-counts">
+                        <span class="current-players">Jogadores agora: ${game.current_players.toLocaleString()}</span>
+                        <span class="daily-peak">Pico diário: ${game.daily_peak_players.toLocaleString()}</span>
+                    </div>
+                `;
+                gameList.appendChild(listItem);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const header = document.querySelector('.header-content');
+            const icon = document.getElementById('toggle-icon');
+            const gameList = document.getElementById('game-list');
+            let isOpen = false;
+
+            header.addEventListener('click', function () {
+                isOpen = !isOpen;
+
+                // Alternar exibição da lista
+                gameList.style.display = isOpen ? 'block' : 'none';
+
+                // Alternar rotação do ícone
+                if (isOpen) {
+                    icon.classList.add('rotate-180');
+                } else {
+                    icon.classList.remove('rotate-180');
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', fetchTopGames); 
+    </script>
+</body>
+</html>

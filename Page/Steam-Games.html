@@ -4,11 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
+    <script src="//code.jquery.com/jquery-3.7.1.js"></script>
+
     <title>Dados dos Jogos</title>
     
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900&display=swap" rel="stylesheet">
@@ -16,25 +19,15 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js" defer></script>
-    <script type="text/javascript" src="/scriptheader.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     
-    <link rel="stylesheet" type="text/css" href="/header.css">
-    
+    <script>
+        $(function () {
+            $("#header").load("/header.html");
+        });
+    </script>
+
     <style>
-        * {
-            font-family: "Roboto", sans-serif;
-            font-size: 1.05rem;
-            font-weight: 500;
-        }
-
-        body {
-            background-color: rgb(32, 30, 63);
-        }
-
-        tbody {
-            color: #3f3f3f;
-        }
 
         .container {
             max-width: 90%;
@@ -91,6 +84,7 @@
             margin-top: 2rem;
             width: 100%;
             padding: 1rem;
+            
             h2 {
                 font-size: 1.25rem;
                 font-weight: 600;
@@ -196,13 +190,15 @@
                 transform: rotate(360deg);
             }
         }
+
     </style>
 </head>
 
 <body>
-    <div id="header-container">
-    </div>
+    <header id="header"></header>
+
     <div class="container mx-auto p-4 bg-white rounded-lg shadow-md mt-8">
+        
         <div class="header_title">
             <h1 class="text-2xl font-semibold text-gray-800 mb-4">Softwares da Plataforma Steam</h1>
             <h3 class="text-gray-600 mb-6">Dados sobre data de lançamento, gratuidade e tipo de app.</h3>
@@ -211,6 +207,7 @@
                 logo não representa atualmente todos os softwares disponiveis na Steam.*
             </p>
         </div>
+
         <div id="tablebox" class="rounded-lg shadow-md" style="width: 100%;">
             <table id="myTable" class="display w-full">
                 <thead>
@@ -226,6 +223,7 @@
                 </tbody>
             </table>
         </div>
+
         <div id="graphics-container" class="mt-8" style="width: 100%;">
             <div class="graphic-box">
                 <h2 style="margin-bottom: 1rem;">Games x Demos</h2>
@@ -249,6 +247,7 @@
                 <h2 style="font-size: 1rem; margin-top: 1rem;">Cerca de 86.66% são pagos e 13.34% são gratuitos.</h2>
             </div>
         </div>
+
         <div id="graphics-container" class="mt-8" style="width: 100%; margin-bottom: 2rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 1.5rem; background-color: white; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);">
             <div id="lancamentos-ano-chart-container" class="chart-container" style="width: 100%; position: relative; overflow: hidden;">
                 <canvas id="lancamentos-ano-chart" style="opacity: 0; transition: opacity 1s ease-in-out; max-height: 400px; margin-bottom: 2rem;"></canvas>
@@ -256,7 +255,9 @@
                 <h2 style="font-size: 1rem; margin-top: 1rem;">*Steam foi lançada em 2003, mas possui jogos anterior a sua época*.</h2>
             </div>
         </div>
+
     </div>
+
     <script>
         const apiUrl = 'http://127.0.0.1:5000/steam-games';
         let dataTable;
@@ -575,6 +576,7 @@
                 document.getElementById('lancamentos-ano-chart').style.opacity = 1;
             }, 100);
         }
+        
         document.addEventListener('DOMContentLoaded', buscarDadosDaApi);
     </script>
 </body>

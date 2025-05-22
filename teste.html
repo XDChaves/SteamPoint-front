@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Top 10 Jogos Steam (Atualizado)</title>
+
+    <style>
+
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; color: #333; }
+        h1 { color: #2c3e50; text-align: center; margin-bottom: 30px; }
+        
+        #game-list {
+            list-style: none;
+            padding: 0;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        #game-list li {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        #game-list li:last-child {
+            border-bottom: none;
+        }
+        #game-list li .game-info {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+        #game-list li .rank {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #3498db;
+            margin-right: 15px;
+            min-width: 30px; /* Para alinhar o rank */
+            text-align: right;
+        }
+        #game-list li .game-name {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #2c3e50;
+            flex-grow: 1;
+        }
+        #game-list li .player-counts {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        #game-list li .current-players,
+        #game-list li .daily-peak {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        #game-list li a {
+            text-decoration: none;
+            color: inherit;
+        }
+        #game-list li a:hover {
+            color: #3498db;
+        }
+        .loading-message, .error-message {
+            text-align: center;
+            padding: 20px;
+            color: #e74c3c;
+        }
+    </style>
+
+</head>
+<body>
+    <h1>Top 10 Jogos Mais Jogados da Steam</h1>
+    <ul id="game-list">
+        <li class="loading-message">Carregando jogos...</li>
+    </ul>
+
+    <script>
+        async function fetchTopGames() {
+            try {
+                // A URL do seu backend Flask (geralmente http://localhost:5000)
+                const response = await fetch('http://localhost:5000/api/top-games'); 
+
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP! status: ${response.status}`);
+                }
+                const games = await response.json();
+                displayGames(games);
+            } catch (error) {
+                console.error("Erro ao buscar jogos:", error);
+                const gameList = document.getElementById('game-list');
+                gameList.innerHTML = '<li class="error-message">Erro ao carregar os jogos. Tente novamente mais tarde.</li>';
+            }
+        }
+
+        function displayGames(games) {
+            const gameList = document.getElementById('game-list');
+            gameList.innerHTML = ''; // Limpa a lista existente
+
+            if (games.length === 0) {
+                gameList.innerHTML = '<li class="loading-message">Nenhum jogo encontrado no momento.</li>';
+                return;
+            }
+
+            games.forEach(game => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <div class="game-info">
+                        <span class="rank">${game.rank}.</span>
+                        <a href="${game.game_url}" target="_blank" class="game-name">${game.name}</a>
+                    </div>
+                    <div class="player-counts">
+                        <span class="current-players">Jogadores agora: ${game.current_players.toLocaleString()}</span>
+                        <span class="daily-peak">Pico diário: ${game.daily_peak_players.toLocaleString()}</span>
+                    </div>
+                `;
+                gameList.appendChild(listItem);
+            });
+        }
+
+        // Chama a função ao carregar a página
+        document.addEventListener('DOMContentLoaded', fetchTopGames);
+    </script>
+</body>
+</html>

@@ -1,11 +1,16 @@
-*{
-    font-family: "Roboto", sans-serif;
-    font-size: 1.05rem;
-    font-weight: 450;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+  text-decoration: none;
 }
 
 body{
-    background-color:  rgb(32, 30, 63);
+    height: 100%;
+    width: 100%;
+    padding-top: 100px;
+    background-color: #3f3f3f;
 }
 
 tbody{
