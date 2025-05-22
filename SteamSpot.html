@@ -33,7 +33,6 @@
             #box{
                 padding: 40px 3vw;
                 background-color: rgba(255, 255, 255, 0.082);
-                height: 100%;
                 width: 50%;
                 border-radius: 1vw;
                 color: white;
@@ -48,12 +47,13 @@
                     display: flex;
                     font-size: clamp(1rem, -1.5rem + 4vw, 1.5rem);
                     text-align: justify;
+                    line-height: 2;
+                    
                 }
                 ul{
                     justify-content: space-around;
                     font-size: clamp(1rem, -1.5rem + 4vw, 1.5rem);
                     text-align: justify;
-                    color: rgb(255, 255, 255);
                     line-height: 2;
                 }
             }
@@ -97,7 +97,7 @@
                 justify-self: center;
             }
         }
-        section:hover{transition: all 1s;background-image: linear-gradient(to left, rgb(0, 18, 34),rgb(2, 55, 102),rgb(0, 18, 34));}
+        section:hover{background-image: linear-gradient(to left, rgb(0, 18, 34),rgb(2, 55, 102),rgb(0, 18, 34));}
 
         #game-list {
             display: block;
@@ -255,8 +255,8 @@
         <div class="text-container">
             <div id="box" class="box1">
                 <h1>Existe uma fórmula do Sucesso?</h1>
-                <p>Não existe uma "fórmula mágica" mas há padrões e características recorrentes nos jogos que alcançam e mantêm o sucesso na Steam.</p>
-                <br>
+                <p>Não existe uma "fórmula mágica" mas há padrões e características recorrentes nos jogos que alcançam e mantêm o sucesso na Steam.</p3>
+                <br><br>
                 <ul>
                     <li>Excelência e Qualidade Inegável</li>
                     <li>Profundidade e Conteúdo Massivo</li>
@@ -266,8 +266,16 @@
                 </ul>
             </div>
             <div id="box" class="box2">
-                <h1></h1>
-                <p></p>
+                <h1>O Fenômeno "Hype"</h1>
+                <p>No universo dinâmico da Steam, nem todo sucesso se traduz em longevidade. 
+                    Há uma categoria de jogos que alcança um pico de popularidade meteórico, por diversos motivos, dominando o topo por dias ou até semanas mas acabam
+                    declinar rapidamente.</p>
+                <br><br>
+                <p>
+                    O que esses tipos de jogos compartilham é que o "motor" do seu sucesso inicial é frequentemente externo à profundidade ou à longevidade do gameplay tradicional.
+                    Uma vez que esse fator inicial diminui ele não consegue reter os jogadores.
+                </p>
+                
             </div>
         </div>
 
@@ -280,7 +288,7 @@
             <ul id="game-list" style="display: none;">
             </ul>
         </section>
-
+        
         <section class="thirdcontainer">
             <div class="header-content">
                 <i id="toggle-icon" class="fa-solid fa-circle-up" style="font-size: clamp(2rem, -1.5rem + 4vw, 5rem);"></i>

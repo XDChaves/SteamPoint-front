@@ -95,7 +95,8 @@ header.scrolled-header {
     background: linear-gradient(to bottom, rgb(0, 0, 0), rgb(0, 0, 0), rgb(0, 0, 0), rgba(0, 0, 0, 0.945), rgba(0, 0, 0, 0.863),rgba(253, 253, 253, 0));
 }
 
-.firstcontainer{  
+.firstcontainer{
+    transition: 1s;
     background-image: url();
     background-size: cover;
     box-shadow: 0 0.5rem 0.6rem rgba(0, 0, 0, 0.664);
