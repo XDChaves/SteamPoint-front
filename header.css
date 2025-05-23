@@ -4,10 +4,11 @@ header{
     left: 0;
     width: 100%;
     z-index: 10;
-    height: 100px;
+    height: 90px;
     overflow: hidden;
     padding: 0 24px;
     background: linear-gradient(to bottom, rgb(0, 0, 0),rgba(253, 253, 253, 0));
+    font-family: "Roboto", sans-serif;
 
     a{
         color: #fff;
@@ -16,7 +17,6 @@ header{
     nav{
         display: flex;
         align-items: center;
-        height: 80%;
     
         #logocontent{
             text-transform: uppercase;
@@ -27,39 +27,34 @@ header{
             .titlelogo{
                 display: inline-flex;
                 align-items: center;
-                font-size: 40px;
-                font-weight: bold ;
+                font-weight: bold;
+                font-size: clamp(3rem, -1.5rem + 4vw, 2rem);
+                color: rgb(255, 255, 255);
             }
-            .titlelogo:hover{
-                transition: 4s;
-                color: rgb(255, 206, 45);
-                transition: all 1s ease;
-                font-weight: bold ;
-            }
-
         }
 
         .navbar{
             position: absolute;
             left: 0;
-            width:100%;
-            justify-content: center;
+            width: 100%;
+            justify-content: flex-end;
             list-style: none;
             display: flex;
             gap: 1vw;
+            padding: 4vw;
                     
             li{
-                font-size: clamp(0.6rem, -2.5rem + 5vw, 1rem);
-                letter-spacing: 3px;
+                font-size: clamp(0.6rem, -1.5rem + 4vw, 0.9rem);
+                letter-spacing: 0.1vw;
                 background-color: black;
                 width: fit-content;
-                border-radius: 20px;
+                border-radius: 2vw;
                 align-self: center;
                 border: 2px rgb(0, 0, 0) solid;
+                transition: all 0.5s ease;
                 display: flex;
                 justify-content: center;
-                padding: 0 1rem;
-                transition: all 0.5s ease;
+                padding: 0.2vh 1vw;
             }
             li:hover{
                 cursor: pointer;

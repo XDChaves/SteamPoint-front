@@ -29,20 +29,35 @@
 
     <style>
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            text-decoration: none;
+        }
+
+        body{
+            padding-top: 100px;
+            background-image: linear-gradient(to left, rgb(0, 18, 34),rgb(1, 36, 66),rgb(0, 18, 34));
+            width: 100%;
+        }
+
         .container {
             max-width: 90%;
             margin: auto;
-            padding: 2rem;
+            padding-top: 20rem;
             text-align: center;
-            margin-top: 20px;
+            background-color: rgba(255, 255, 255, 0.082);
         }
 
-        .header_tilte {
-            border-radius: 0.5rem;
-            padding: 24px 16px 0px 16px;
+        .header_title{
+            background-color: #e4e7ee;
+            padding: 16px;
+            margin-bottom: 1rem;
         }
 
         #tablebox {
+            background-color: #e4e7ee;
             padding: 16px;
             margin-bottom: 24px;
 
@@ -60,12 +75,15 @@
                     outline: none;
                     transition: 0.2s;
                     padding: 0.2rem 1rem;
+                    background-color: white;
                 }
             }
 
             #myTable {
                 border: #181a1f 1px solid;
                 border-radius: 1px;
+                background-color: rgb(240, 239, 239);
+                font-weight: 500;
 
                 #appidtitle {
                     width: 15%;
@@ -86,7 +104,7 @@
             padding: 1rem;
             
             h2 {
-                font-size: 1.25rem;
+                font-size: clamp(1rem, -1.5rem + 4vw, 1rem);
                 font-weight: 600;
                 margin-bottom: 1rem;
                 color: #374151;
@@ -106,6 +124,11 @@
                 box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
                 opacity: 0;
                 transition: opacity 1s ease-in-out;
+
+                h2{
+                    font-size: clamp(1rem, -1.5rem + 4vw, 1rem); 
+                    margin: 1rem 0;
+                }
             }
 
             .graphic-box.loaded,
@@ -124,6 +147,7 @@
         .graphic-box,
         .graphic-box2,
         .graphic-box3 {
+
             .select-container {
                 margin-top: 1rem;
                 display: flex;
@@ -132,13 +156,14 @@
                 gap: 0.5rem;
                 margin-bottom: 1rem;
 
+
                 select {
                     padding: 0.5rem;
                     border: 1px solid #d1d5db;
                     border-radius: 0.375rem;
                     width: 200px;
                     max-width: 100%;
-                    font-size: 0.875rem;
+                    font-size: clamp(0.8rem, -1.5rem + 4vw, 0.8rem);
                     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
                 }
 
@@ -197,9 +222,8 @@
 <body>
     <header id="header"></header>
 
-    <div class="container mx-auto p-4 bg-white rounded-lg shadow-md mt-8">
-        
-        <div class="header_title">
+    <div class="container mx-auto p-4 rounded-lg shadow-md mt-8">
+        <div class="header_title rounded-lg">
             <h1 class="text-2xl font-semibold text-gray-800 mb-4">Softwares da Plataforma Steam</h1>
             <h3 class="text-gray-600 mb-6">Dados sobre data de lançamento, gratuidade e tipo de app.</h3>
             <p class="text-gray-600 mb-6">
@@ -226,29 +250,29 @@
 
         <div id="graphics-container" class="mt-8" style="width: 100%;">
             <div class="graphic-box">
-                <h2 style="margin-bottom: 1rem;">Games x Demos</h2>
+                <h2>Games x Demos</h2>
                 <div id="tipo-jogo-chart-container" class="chart-container">
                     <canvas id="tipo-jogo-chart"></canvas>
                 </div>
-                <h2 style="font-size: 1rem; margin-top: 1rem;">Cerca de 98,31% são jogos e 1,69% são demos.</h2>
+                <h2>Cerca de 98,31% são jogos e 1,69% são demos.</h2>
             </div>
             <div class="graphic-box2">
-                <h2 style="margin-bottom: 1rem;">Gratuitos x Pagos</h2>
+                <h2>Gratuitos x Pagos</h2>
                 <div id="gratuidade-chart-container" class="chart-container">
                     <canvas id="gratuidade-chart"></canvas>
                 </div>
-                <h2 style="font-size: 1rem; margin-top: 1rem;">Cerca de 14,81% são pagos e 85,19% são gratuitos.</h2>
+                <h2>Cerca de 14,81% são pagos e 85,19% são gratuitos.</h2>
             </div>
             <div class="graphic-box3">
-                <h2 style="margin-bottom: 1rem;">Games Gratuitos x Games Pagos</h2>
+                <h2>Games Gratuitos x Games Pagos</h2>
                 <div id="gratuidade-games-chart-container" class="chart-container">
                     <canvas id="gratuidade-games-chart"></canvas>
                 </div>
-                <h2 style="font-size: 1rem; margin-top: 1rem;">Cerca de 86.66% são pagos e 13.34% são gratuitos.</h2>
+                <h2>Cerca de 86.66% são pagos e 13.34% são gratuitos.</h2>
             </div>
         </div>
 
-        <div id="graphics-container" class="mt-8" style="width: 100%; margin-bottom: 2rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 1.5rem; background-color: white; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);">
+        <div id="graphics-container" class="mt-8" style="width: 100%; background: white; margin-bottom: 2rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 1.5rem; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);">
             <div id="lancamentos-ano-chart-container" class="chart-container" style="width: 100%; position: relative; overflow: hidden;">
                 <canvas id="lancamentos-ano-chart" style="opacity: 0; transition: opacity 1s ease-in-out; max-height: 400px; margin-bottom: 2rem;"></canvas>
                 <h2 id="null-release-count" style="font-size: 1rem; margin-top: 1rem;"></h2>

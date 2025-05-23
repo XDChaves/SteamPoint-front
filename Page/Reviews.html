@@ -9,6 +9,7 @@
 
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
@@ -17,132 +18,46 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="/scriptheader.js"></script>
     
-    <link rel="stylesheet" type="text/css" href="/header.css">
-   
-   <style>
-        * {
-            font-family: "Roboto", sans-serif;
-            font-size: 1.05rem;
-            font-weight: 450;
-        }
+    <link rel="stylesheet" type="text/css" href="/Page/style.css"/>
 
-        body {
-            background-color:  rgb(32, 30, 63);
-        }
+    <script>
+        $(function () {
+            $("#header").load("/header.html");
+        });
+    </script>
 
-        tbody {
-            color: #3f3f3f;
-        }
-
-        .container {
-            max-width: 90%;
-            margin: 24px auto 0 auto;
-            /* margem superior padronizada */
-            padding: 24px;
-            text-align: center;
-        }
-
-        .header_title {
-            border-radius: 0.5rem;
-            padding: 24px 16px 0px 16px;
-        }
-
-        #tablebox {
-            padding: 16px;
-            margin-bottom: 24px;
-            max-height: 700px;
-            min-height: 700px;
-
-            #myTable_length {
-                margin-bottom: 16px;
-                width: fit-content;
-            }
-
-            #myTable_filter {
-                margin-bottom: 16px;
-                width: 40%;
-
-                input {
-                    width: 80%;
-                    outline: none;
-                    transition: 0.2s;
-                    padding: 0.2rem 1rem;
-                }
-            }
-
-            #myTable {
-                border: #181a1f 1px solid;
-                border-radius: 1px;
-
-                #appidtitle {
-                    width: 10%;
-                }
-                #nameidtitle{
-                    width: 30%;
-                }
-            }
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 16px;
-            }
-        }
-
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border-left-color: #7275b5;
-            animation: spin 1s ease infinite;
-            margin: 0 auto;
-            color: #4b5563;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        #chartContainer,
-        #chartContainerNegative,
-        #chartContainerPie,
-        #chartContainerRecommendations {
+    <style>
+        #graphics-container2{
             width: 100%;
-            margin: 20px auto;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 10px;
-            background-color: white;
-            box-sizing: border-box;
-            display: none;
+            padding: 24px;
+            gap: 24px;
+            background-color: #e4e7ee;
+            border-radius: 0.5rem;
         }
-
-        #chartContainer canvas,
-        #chartContainerNegative canvas,
-        #chartContainerPie canvas,
-        #chartContainerRecommendations canvas {
-            display: block;
-            max-height: 400px;
+        .box{
+            width: 100%;
+            margin-bottom: 24px;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 24px;
+            background-color: white;
+        }
+        #chartContainerPie {
+            max-width: 500px;
+            justify-self: center;
+            width: 100%;
         }
     </style>
+
 </head>
 
 <body>
-    <div id="header-container">
-    </div>
+    <header id="header"></header>
 
-    <div class="container mx-auto p-4 bg-white rounded-lg shadow-md mt-8">
+    <div class="container mx-auto p-4 rounded-lg shadow-md mt-8">
 
-        <div class="header_title">
+        <div class="header_title rounded-lg">
             <h1 class="text-2xl font-semibold text-gray-800 mb-4">Reviews dos Apss</h1>
             <p class="text-gray-600 mb-6">Análise das reviews dos apps da Steam.</p>
         </div>
@@ -170,20 +85,30 @@
             </div>
         </div>
 
-        <div id="chartContainer">
-            <canvas id="top10ReviewsChart" width="400" height="200"></canvas>
-        </div>
+        <div id="graphics-container2">
+            <div class="box">
+                <div id="chartContainer">
+                    <canvas id="top10ReviewsChart" width="400" height="200"></canvas>
+                </div>
+            </div>
 
-        <div id="chartContainerNegative">
-            <canvas id="top10NegativeReviewsChart" width="400" height="200"></canvas>
-        </div>
+            <div class="box">
+                <div id="chartContainerNegative">
+                    <canvas id="top10NegativeReviewsChart" width="400" height="200"></canvas>
+                </div>
+            </div>
 
-        <div id="chartContainerPie">
-            <canvas id="reviewScorePieChart" width="400" height="200"></canvas>
-        </div>
+            <div class="box">
+                <div id="chartContainerRecommendations">
+                    <canvas id="recommendationsChart" width="400" height="200"></canvas>
+                </div>
+            </div>
 
-        <div id="chartContainerRecommendations">
-            <canvas id="recommendationsChart" width="400" height="200"></canvas>
+            <div class="box">
+                <div id="chartContainerPie">
+                    <canvas id="reviewScorePieChart"></canvas>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -246,9 +171,18 @@
                 } else {
                     dataTable = $('#myTable').DataTable({
                         data: dados,
-                        columns: [
-                            { "data": "app_id" },
-                            { "data": "name" },
+                        columns: [{
+                            "data": "app_id",
+                            "render": function (data) {
+                                return '<a href="Detalhes-Game.html?id=' + data + '">' + data + '</a>';
+                            }
+                        },
+                        {
+                            "data": "name",
+                            "render": function (data, type, row) {
+                                return '<a href="Detalhes-Game.html?id=' + row.app_id + '">' + data + '</a>';
+                            }
+                        },
                             { "data": "review_score" },
                             { "data": "positive" },
                             { "data": "negative" },
@@ -257,7 +191,7 @@
                             { "data": "recommendations" }
                         ],
                         "columnDefs": [
-                            { "type": "num", "targets": [0, 2, 3, 4, 5, 6, 7] } // Colunas nos índices 3, 4, 5 e 7 são numéricas
+                            { "type": "num", "targets": [0, 2, 3, 4, 5, 6, 7] }
                         ],
                         "language": {
                             "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
@@ -269,7 +203,6 @@
                             // Adiciona o evento de clique aos cabeçalhos APÓS a inicialização do DataTable
                             $('#myTable thead th').on('click', function () {
                                 var columnIndex = $(this).index();
-                                // Remove qualquer filtro existente
                                 dataTable.search('').columns().search('').draw();
                                 // Aplica o filtro à coluna clicada para remover linhas com '\N'
                                 dataTable.column(columnIndex).search(
@@ -298,17 +231,15 @@
             const ctx = document.getElementById('top10ReviewsChart').getContext('2d');
             document.getElementById('chartContainer').style.display = 'block';
 
-
-            // Cria o gráfico de barras
             reviewChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: gameNames,
                     datasets: [{
-                        label: 'Top 10 Jogos por Reviews Positivas',
+                        label: 'Top 20 Jogos por Reviews Positivas',
                         data: positiveCounts,
                         backgroundColor: [
-                            'rgba(54, 162, 235, 0.8)', // Azul
+                            'rgba(54, 162, 235, 0.8)',
                         ],
                         borderColor: [
                             'rgba(54, 162, 235, 1)',
@@ -328,7 +259,7 @@
                             }
                         },
                         legend: {
-                            position: 'bottom'
+                            display: false
                         }
                     },
                     scales: {
@@ -336,14 +267,14 @@
                             beginAtZero: true,
                             ticks: {
                                 callback: function (value) {
-                                    return value; // converte o valor para string
+                                    return value;
                                 }
                             }
                         },
                         x: {
                             ticks: {
-                                autoSkip: false, // Garante que todos os rótulos sejam exibidos
-                                maxRotation: 50, // Ajusta a rotação dos rótulos
+                                autoSkip: false,
+                                maxRotation: 50,
                                 minRotation: 50
                             }
                         }
@@ -370,10 +301,10 @@
                 data: {
                     labels: gameNamesNegativos,
                     datasets: [{
-                        label: 'Top 10 Jogos por Reviews Negativas',
+                        label: 'Top 20 Jogos por Reviews Negativas',
                         data: negativeCounts,
                         backgroundColor: [
-                            'rgba(255, 99, 132, 0.8)', // Vermelho
+                            'rgba(255, 99, 132, 0.8)',
                         ],
                         borderColor: [
                             'rgba(255, 99, 132, 1)',
@@ -393,7 +324,7 @@
                             }
                         },
                         legend: {
-                            position: 'bottom'
+                            display: false
                         }
                     },
                     scales: {
@@ -451,7 +382,6 @@
                 'rgba(244, 164, 96, 0.8)'
             ];
 
-            // Cria o gráfico de pizza
             reviewScorePieChart = new Chart(ctxPie, {
                 type: 'pie',
                 data: {
@@ -518,13 +448,13 @@
                     plugins: {
                         title: {
                             display: true,
-                            text: 'Top 10 Jogos por Recomendações',
+                            text: 'Top 20 Jogos por Recomendações',
                             font: {
                                 size: 16
                             }
                         },
                         legend: {
-                            position: 'bottom'
+                            display: false
                         }
                     },
                     scales: {

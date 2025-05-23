@@ -1,16 +1,14 @@
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Roboto", sans-serif;
-  text-decoration: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
 }
 
 body{
-    height: 100%;
-    width: 100%;
     padding-top: 100px;
-    background-color: #3f3f3f;
+    background-image: linear-gradient(to left, rgb(0, 18, 34),rgb(1, 36, 66),rgb(0, 18, 34));
+    width: 100%;
 }
 
 tbody{
@@ -19,44 +17,53 @@ tbody{
 
 .container {
     max-width: 90%;
-    margin: 24px auto 0 auto; /* margem superior padronizada */
-    padding: 24px;
+    margin: auto;
+    padding-top: 20rem;
     text-align: center;
+    background-color: rgba(255, 255, 255, 0.082);
 }
 
-.header_title {
-    border-radius: 0.5rem;
-    padding: 24px 16px 0px 16px;
+.header_title{
+    background-color: #e4e7ee;
+    padding: 16px;
+    margin-bottom: 1rem;
 }
 
 #tablebox {
+    background-color: #e4e7ee;
     padding: 16px;
     margin-bottom: 24px;
-            
+
     #myTable_length {
         margin-bottom: 16px;
         width: fit-content;
     }
-    #myTable_filter{
+
+    #myTable_filter {
         margin-bottom: 16px;
         width: 40%;
-        
-        input{
+
+        input {
             width: 80%;
             outline: none;
             transition: 0.2s;
             padding: 0.2rem 1rem;
+            background-color: white;
         }
     }
+
     #myTable {
         border: #181a1f 1px solid;
         border-radius: 1px;
-                
+        background-color: rgb(240, 239, 239);
+        font-weight: 500;
+
         #appidtitle {
-            width: 8%;
+            width: 15%;
         }
-        #nameidtitle{
-            width: 20%;
+
+        #nameidtitle {
+            width: 25%;
         }
     }
 }
@@ -68,7 +75,9 @@ tbody{
     margin-top: 32px;
     width: 100%;
     padding: 24px;
-    gap: 24px; /* Espaçamento entre gráficos */
+    gap: 24px;
+    background-color: #e4e7ee;
+    border-radius: 0.5rem;
   
     .graphic-box {
         width: 100%;
@@ -98,26 +107,6 @@ tbody{
     }.graphic-box.loaded {
         opacity: 1;
     }
-}
-
-@media (max-width: 768px) {
-    .container {
-        padding: 16px;
-    }
-    #graphics-container {
-        flex-direction: column;
-        align-items: center;
-        padding: 16px;
-        gap: 16px;
-        
-        .graphic-box {
-            width: 100%;
-            max-width: 100%;
-            padding: 16px;
-            margin-bottom: 16px;
-        }
-    }
-    
 }
 
 .spinner {

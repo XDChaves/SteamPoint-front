@@ -7,6 +7,7 @@
     <title>SteamSpot</title>
 
     <link rel="stylesheet" href="/spotstyle.css">
+    <link rel="stylesheet" href="/header.css">
     <script type="text/javascript" src="/steamspot.js"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -114,7 +115,7 @@
                 justify-content: space-between;
                 align-items: center;
                 flex-wrap: wrap;
-                font-size: clamp(0.5rem, -1.5rem + 3vw, 1.5rem);
+                font-size: clamp(0.5rem, -1.5rem + 3vw, 1.2rem);
         
                 .game-info {
                     display: flex;
@@ -139,7 +140,7 @@
                     align-items: flex-end;
                 }
                 .current-players{
-                    color: #ffc0c0;
+                    color: #fcfcfc;
                     margin-top: 5px;
                 }
 
@@ -158,43 +159,9 @@
 
         }
 
-        .thirdcontainer{
-            font-family: "Roboto", sans-serif;
-            padding: 0 3vw;
-            border-bottom: 2px white solid;
-
-            h1 {
-                color: #ffffff; 
-                text-align: center; 
-                margin: 1.5rem 0;
-                font-size: clamp(1rem, -1.5rem + 4vw, 3rem);
-            }
-            .header-content{
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 1vw;
-
-                .fa-solid{
-                    cursor: pointer;
-                    transition: all 0.5s ease;
-                    color: #ffffff;
-                }
-
-            }
-            .header-content:hover{
-                cursor: pointer;
-
-                .fa-circle-up{
-                    color: rgb(56, 215, 255);
-                    transform: rotate(90deg);
-                }
-            }
-
-            .error-message{
-                color: #c1c1c1;
-                justify-self: center;
-            }
+        .textsecond-container{
+            background-image: linear-gradient(to left, rgb(0, 18, 34),rgb(0, 19, 36),rgb(0, 18, 34));
+            height: 400px;
         }
         
     </style>
@@ -206,15 +173,16 @@
         <nav>
             <a id="logocontent" href="">
                 <img src="/imgs/xsteamlog.png" style="height: 80px;">
-                <div class="titlelogo"><h3>S</h3><h4>team</h4><h3>S</h3><h4>pot</h4><h3>S</h3></div>
+                <div class="titlelogo"><text>SteamSpotS</text></div>
             </a>
 
             <ul class="navbar">
-                <li><a href=""> GRAPHICS </a></li>
-                <li><a href=""> PAGES </a></li>
-                <li><a href=""> ABOUT </a></li>
+                <li><a href="/Page/Steam-Games.html"> GAMES </a></li>
+                <li><a href="/Page/Games-Insights.html"> INSIGHTS </a></li>
+                <li><a href="/Page/Reviews.html"> AVALIAÇÕES </a></li>
+                <li><a href="/Page/Categories.html"> CATEGORIAS </a></li>
+                <li><a href="/Page/Tags.html"> TAGS </a></li>
             </ul>
-
         </nav>
     </header>
 
@@ -291,18 +259,10 @@
             <ul id="game-list" style="display: none;">
             </ul>
         </section>
-        
-        <section class="thirdcontainer">
-            <div class="header-content">
-                <i id="toggle-icon" class="fa-solid fa-circle-up" style="font-size: clamp(2rem, -1.5rem + 4vw, 5rem);"></i>
-                <h1>Top 10 </h1>
-            </div>
 
-            <ul id="" style="display: none;">
-            </ul>
-        </section>
+        <div class="textsecond-container">
 
-
+        </div>
     </main>
     
     <footer>
