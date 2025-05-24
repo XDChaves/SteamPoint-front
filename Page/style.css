@@ -128,3 +128,33 @@ tbody{
         transform: rotate(360deg);
     }
 }
+
+.text-container{
+    font-family: "Roboto", sans-serif;
+    height: 100%;
+    width: 50%;
+    margin-bottom: 1rem;
+
+    #box{
+        border-radius: 0.5rem;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+        padding: 40px 3vw;
+        background-color: rgba(107, 107, 107, 0.144);
+        border-radius: 1vw;
+        color: rgb(0, 0, 0);
+        box-shadow: white 0px 0px 0.1vw;
+        font-weight: 500;
+
+        h1{
+            text-align: center;
+            font-size: clamp(1rem, -1.5rem + 4vw, 1.5rem);
+            margin-bottom: 2rem;
+        }
+        p{
+            font-size: clamp(1rem, -1.5rem + 4vw, 1.2rem);
+            text-align: justify;
+            line-height: 2;
+        }
+    }
+}

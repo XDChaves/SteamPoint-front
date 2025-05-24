@@ -51,7 +51,7 @@ header{
                 border-radius: 2vw;
                 align-self: center;
                 border: 2px rgb(0, 0, 0) solid;
-                transition: all 0.5s ease;
+                transition: 0.5s ease;
                 display: flex;
                 justify-content: center;
                 padding: 0.2vh 1vw;

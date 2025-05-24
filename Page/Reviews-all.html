@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Análise de Gêneros e Tags em Jogos Relevantes</title>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" type="text/css" href="/Page/style.css"/>
+
+    <script>
+        $(function () {
+            $("#header").load("/header.html");
+        });
+    </script>
+
+    <style>
+        .zz{
+            max-width: 70rem;
+        }
+        .graphic-box {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            transition: opacity 1s ease-in-out;
+            opacity: 0; /* Initially hidden for animation */
+        }
+        .graphic-box.loaded {
+            opacity: 1; /* Show when loaded */
+        }
+        #chart-container {
+            position: relative;
+            height: 400px; /* Fixed height for the chart */
+            width: 100%;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #7275b5;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+
+<body>
+    <header id="header"></header>
+
+    <div class="container mx-auto p-4 rounded-lg shadow-md mt-8 zz">
+
+        <div class="header_title rounded-lg">
+            <h1 class="text-2xl font-semibold text-gray-800 mb-4">Análise de Gêneros e Tags em Jogos Relevantes</h1>
+            <p class="text-gray-600 mb-6">Visualização da frequência de gêneros e tags em jogos que atendem aos critérios de relevância.</p>
+            <div id="loadingIndicator" style="display:none; text-align:center; padding: 20px;">
+                <div class="spinner"></div>
+                <p>Carregando dados, por favor aguarde...</p>
+            </div>
+        </div>
+
+        <div id="genres-graphics-container">
+            <div class="graphic-box">
+                <div id="genre-chart-container">
+                    <canvas id="genreRelevantGamesChart" style="display: block; box-sizing: border-box; height: 500px; width: 816px;" height="500" width="1000"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="tags-graphics-container" class="mt-8">
+            <div class="graphic-box">
+                <div id="tag-chart-container">
+                    <canvas id="tagRelevantGamesChart" style="display: block; box-sizing: border-box; height: 500px; width: 816px;" height="500" width="1000"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="languages-graphics-container" class="mt-8">
+            <div class="graphic-box">
+                <div id="language-chart-container">
+                    <canvas id="languageRelevantGamesChart" style="display: block; box-sizing: border-box; height: 500px; width: 816px;" height="500" width="1000"></canvas>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        // Define a URL da API para os dados combinados
+        const apiUrl = 'http://127.0.0.1:5000/rev-all';
+        let genreRelevantGamesChart; // Variável para a instância do gráfico de gêneros
+        let tagRelevantGamesChart;   // Variável para a instância do gráfico de tags
+        let languageRelevantGamesChart; // Variável para a instância do gráfico de linguagens
+
+        // --- PARÂMETROS PARA DEFINIR UM JOGO RELEVANTE ---
+        const MIN_POSITIVE_REVIEWS = 5000;
+        const MIN_RECOMMENDATIONS = 100000;
+        const MIN_POSITIVE_PERCENTAGE = 60; 
+        // --- FIM DOS PARÂMETROS ---
+
+        /**
+         * Função assíncrona para buscar dados da API e processá-los para todos os gráficos.
+         */
+        async function buscarDadosDaApi() {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            loadingIndicator.style.display = 'block'; // Mostra o indicador de carregamento
+
+            try {
+                console.log('Tentando buscar dados da API /rev-all...');
+                const response = await fetch(apiUrl); // Faz a requisição à API
+
+                if (!response.ok) {
+                    throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
+                }
+
+                const dadosJson = await response.json();
+                const dados = dadosJson.data || dadosJson; 
+                
+                if (!Array.isArray(dados)) {
+                    console.error("Erro: Dados esperados como array, mas recebido:", dados);
+                    throw new Error("Formato de dados inesperado da API. Esperado um array de objetos.");
+                }
+
+                console.log('Dados processados para o gráfico:', dados);
+
+                // Array para armazenar jogos relevantes
+                const relevantGames = [];
+
+                dados.forEach(item => {
+                    // Converte valores para números inteiros
+                    const positiveValue = parseInt(item.positive, 10);
+                    const totalReviewsValue = parseInt(item.total, 10);
+                    const recommendationsValue = parseInt(item.recommendations, 10);
+
+                    let positivePercentage = 0;
+                    if (!isNaN(positiveValue) && !isNaN(totalReviewsValue) && totalReviewsValue > 0) {
+                        positivePercentage = (positiveValue / totalReviewsValue) * 100;
+                    }
+
+                    // --- LÓGICA DE FILTRAGEM PARA JOGOS RELEVANTES ---
+                    const isRelevantGame = 
+                        item.all_tags && 
+                        item.genres && 
+                        item.languages && // Adiciona a checagem para 'languages'
+                        !isNaN(positiveValue) && positiveValue >= MIN_POSITIVE_REVIEWS &&
+                        !isNaN(recommendationsValue) && recommendationsValue >= MIN_RECOMMENDATIONS &&
+                        !isNaN(positivePercentage) && positivePercentage >= MIN_POSITIVE_PERCENTAGE;
+
+                    if (isRelevantGame) {
+                        relevantGames.push(item);
+                    }
+                });
+
+                console.log(`Total de jogos relevantes encontrados: ${relevantGames.length}`);
+
+                // --- Processamento para o Gráfico de Gêneros ---
+                const genreCounts = {};
+                relevantGames.forEach(game => {
+                    const genresArray = game.genres.split(',').map(genre => genre.trim());
+                    genresArray.forEach(genre => {
+                        if (genre) {
+                            genreCounts[genre] = (genreCounts[genre] || 0) + 1;
+                        }
+                    });
+                });
+
+                const sortedGenreData = Object.entries(genreCounts)
+                    .sort(([, countA], [, countB]) => countB - countA);
+                const top10Genres = sortedGenreData.slice(0, 10);
+                console.log('Top 10 Gêneros em Jogos Relevantes:', top10Genres);
+
+                // --- Processamento para o Gráfico de Tags ---
+                const tagCounts = {};
+                relevantGames.forEach(game => {
+                    const tagsArray = game.all_tags.split(',').map(tag => tag.trim());
+                    tagsArray.forEach(tag => {
+                        if (tag) {
+                            tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+                        }
+                    });
+                });
+
+                const sortedTagData = Object.entries(tagCounts)
+                    .sort(([, countA], [, countB]) => countB - countA);
+                const top10Tags = sortedTagData.slice(0, 10);
+                console.log('Top 10 Tags em Jogos Relevantes:', top10Tags);
+
+                // --- Processamento para o Gráfico de Linguagens ---
+                const languageCounts = {};
+                relevantGames.forEach(game => {
+                    const languagesString = game.languages;
+                    if (languagesString && typeof languagesString === 'string') {
+                        // Divide a string de linguagens e filtra strings vazias
+                        const languagesArray = languagesString.split(',').map(lang => lang.trim()).filter(Boolean);
+                        languagesArray.forEach(language => {
+                            if (language) {
+                                languageCounts[language] = (languageCounts[language] || 0) + 1;
+                            }
+                        });
+                    }
+                });
+
+                const sortedLanguageData = Object.entries(languageCounts)
+                    .sort(([, countA], [, countB]) => countB - countA);
+                const top10Languages = sortedLanguageData.slice(0, 10);
+                console.log('Top 10 Linguagens em Jogos Relevantes:', top10Languages);
+
+
+                // Atualiza todos os gráficos
+                if (top10Genres.length > 0) {
+                    atualizarGraficoGeneros(top10Genres);
+                } else {
+                    document.getElementById('genres-graphics-container').innerHTML = `<p class="text-gray-600 text-center">Nenhum gênero encontrado para jogos relevantes.</p>`;
+                }
+
+                if (top10Tags.length > 0) {
+                    atualizarGraficoTags(top10Tags);
+                } else {
+                    document.getElementById('tags-graphics-container').innerHTML = `<p class="text-gray-600 text-center">Nenhuma tag encontrada para jogos relevantes.</p>`;
+                }
+
+                if (top10Languages.length > 0) {
+                    atualizarGraficoLinguagens(top10Languages);
+                } else {
+                    document.getElementById('languages-graphics-container').innerHTML = `<p class="text-gray-600 text-center">Nenhuma linguagem encontrada para jogos relevantes.</p>`;
+                }
+
+
+                // Adiciona uma pequena animação para os gráficos aparecerem suavemente
+                setTimeout(() => {
+                    document.getElementById('genres-graphics-container').querySelector('.graphic-box').classList.add('loaded');
+                    document.getElementById('tags-graphics-container').querySelector('.graphic-box').classList.add('loaded');
+                    document.getElementById('languages-graphics-container').querySelector('.graphic-box').classList.add('loaded'); // Adiciona a animação para o novo gráfico
+                }, 1000);
+
+            } catch (error) {
+                console.error('Erro ao buscar dados da API:', error);
+                document.getElementById('genres-graphics-container').innerHTML = `<p class="text-red-500 text-center">Erro ao carregar os dados: ${error.message}</p>`;
+                document.getElementById('tags-graphics-container').innerHTML = `<p class="text-red-500 text-center">Erro ao carregar os dados: ${error.message}</p>`;
+                document.getElementById('languages-graphics-container').innerHTML = `<p class="text-red-500 text-center">Erro ao carregar os dados: ${error.message}</p>`; // Mensagem de erro para o novo gráfico
+            } finally {
+                setTimeout(() => {
+                    loadingIndicator.style.display = 'none';
+                }, 1000);
+            }
+        }
+
+        /**
+         * Atualiza ou cria o gráfico de barras para Gêneros.
+         * @param {Array<Array<string|number>>} dados - Um array de arrays, onde cada sub-array contém [gênero, contagem_jogos].
+         */
+        function atualizarGraficoGeneros(dados) {
+            const labels = dados.map(item => item[0]); // Nomes dos gêneros
+            const counts = dados.map(item => item[1]); // Contagem de jogos
+
+            if (genreRelevantGamesChart) {
+                genreRelevantGamesChart.destroy(); // Destrói o gráfico existente antes de criar um novo
+            }
+
+            const ctx = document.getElementById('genreRelevantGamesChart').getContext('2d');
+            genreRelevantGamesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: `Número de Jogos Relevantes`,
+                        data: counts,
+                        backgroundColor: '#7275b5', // Cor de fundo das barras
+                        borderColor: '#7275b5',     // Cor da borda das barras
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // Permite que o gráfico não mantenha a proporção original
+                    animation: { duration: 1000, easing: 'easeInOutQuad' }, // Animação ao carregar
+                    scales: {
+                        y: {
+                            beginAtZero: true, // Começa o eixo Y em zero
+                            ticks: { precision: 0 }, // Garante que os ticks sejam inteiros
+                            title: { display: true, text: 'Número de Jogos Relevantes' } // Título do eixo Y
+                        },
+                        x: {
+                            title: { display: true, text: 'Gênero' } // Título do eixo X
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }, // Oculta a legenda
+                        title: {
+                            display: true,
+                            text: `Top 10 Gêneros por Número de Jogos Relevantes`, // Título do gráfico
+                            font: { size: 16 }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Jogos Relevantes: ${new Intl.NumberFormat('pt-BR').format(context.parsed.y)}`; // Formatação do tooltip
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        /**
+         * Atualiza ou cria o gráfico de barras para Tags.
+         * @param {Array<Array<string|number>>} dados - Um array de arrays, onde cada sub-array contém [tag, contagem_jogos].
+         */
+        function atualizarGraficoTags(dados) {
+            const labels = dados.map(item => item[0]); // Nomes das tags
+            const counts = dados.map(item => item[1]); // Contagem de jogos
+
+            if (tagRelevantGamesChart) {
+                tagRelevantGamesChart.destroy(); // Destrói o gráfico existente antes de criar um novo
+            }
+
+            const ctx = document.getElementById('tagRelevantGamesChart').getContext('2d');
+            tagRelevantGamesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: `Número de Jogos Relevantes`,
+                        data: counts,
+                        backgroundColor: '#5890B6FF', // Cor de fundo das barras
+                        borderColor: '#5890B6FF',     // Cor da borda das barras
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // Permite que o gráfico não mantenha a proporção original
+                    animation: { duration: 1000, easing: 'easeInOutQuad' }, // Animação ao carregar
+                    scales: {
+                        y: {
+                            beginAtZero: true, // Começa o eixo Y em zero
+                            ticks: { precision: 0 }, // Garante que os ticks sejam inteiros
+                            title: { display: true, text: 'Número de Jogos Relevantes' } // Título do eixo Y
+                        },
+                        x: {
+                            title: { display: true, text: 'Tag' } // Título do eixo X
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }, // Oculta a legenda
+                        title: {
+                            display: true,
+                            text: `Top 10 Tags por Número de Jogos Relevantes`, // Título do gráfico
+                            font: { size: 16 }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Jogos Relevantes: ${new Intl.NumberFormat('pt-BR').format(context.parsed.y)}`; // Formatação do tooltip
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        /**
+         * Atualiza ou cria o gráfico de barras para Linguagens.
+         * @param {Array<Array<string|number>>} dados - Um array de arrays, onde cada sub-array contém [linguagem, contagem_jogos].
+         */
+        function atualizarGraficoLinguagens(dados) {
+            const labels = dados.map(item => item[0]); // Nomes das linguagens
+            const counts = dados.map(item => item[1]); // Contagem de jogos
+
+            if (languageRelevantGamesChart) {
+                languageRelevantGamesChart.destroy(); // Destrói o gráfico existente antes de criar um novo
+            }
+
+            const ctx = document.getElementById('languageRelevantGamesChart').getContext('2d');
+            languageRelevantGamesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: `Número de Jogos Relevantes`,
+                        data: counts,
+                        backgroundColor: '#28a745', // Cor verde para o novo gráfico
+                        borderColor: '#28a745',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // Permite que o gráfico não mantenha a proporção original
+                    animation: { duration: 1000, easing: 'easeInOutQuad' }, // Animação ao carregar
+                    scales: {
+                        y: {
+                            beginAtZero: true, // Começa o eixo Y em zero
+                            ticks: { precision: 0 }, // Garante que os ticks sejam inteiros
+                            title: { display: true, text: 'Número de Jogos Relevantes' } // Título do eixo Y
+                        },
+                        x: {
+                            title: { display: true, text: 'Linguagem' } // Título do eixo X
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }, // Oculta a legenda
+                        title: {
+                            display: true,
+                            text: `Top 10 Linguagens por Número de Jogos Relevantes`, // Título do gráfico
+                            font: { size: 16 }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Jogos Relevantes: ${new Intl.NumberFormat('pt-BR').format(context.parsed.y)}`; // Formatação do tooltip
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Adiciona um listener para carregar os dados e os gráficos quando o DOM estiver completamente carregado
+        document.addEventListener('DOMContentLoaded', buscarDadosDaApi);
+    </script>
+</body>
+
+</html>

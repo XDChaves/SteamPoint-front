@@ -20,6 +20,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/Page/style.css"/>
     
     <script>
         $(function () {
@@ -28,72 +30,6 @@
     </script>
 
     <style>
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            text-decoration: none;
-        }
-
-        body{
-            padding-top: 100px;
-            background-image: linear-gradient(to left, rgb(0, 18, 34),rgb(1, 36, 66),rgb(0, 18, 34));
-            width: 100%;
-        }
-
-        .container {
-            max-width: 90%;
-            margin: auto;
-            padding-top: 20rem;
-            text-align: center;
-            background-color: rgba(255, 255, 255, 0.082);
-        }
-
-        .header_title{
-            background-color: #e4e7ee;
-            padding: 16px;
-            margin-bottom: 1rem;
-        }
-
-        #tablebox {
-            background-color: #e4e7ee;
-            padding: 16px;
-            margin-bottom: 24px;
-
-            #myTable_length {
-                margin-bottom: 16px;
-                width: fit-content;
-            }
-
-            #myTable_filter {
-                margin-bottom: 16px;
-                width: 40%;
-
-                input {
-                    width: 80%;
-                    outline: none;
-                    transition: 0.2s;
-                    padding: 0.2rem 1rem;
-                    background-color: white;
-                }
-            }
-
-            #myTable {
-                border: #181a1f 1px solid;
-                border-radius: 1px;
-                background-color: rgb(240, 239, 239);
-                font-weight: 500;
-
-                #appidtitle {
-                    width: 15%;
-                }
-
-                #nameidtitle {
-                    width: 25%;
-                }
-            }
-        }
 
         #graphics-container {
             display: flex;
@@ -126,7 +62,7 @@
                 transition: opacity 1s ease-in-out;
 
                 h2{
-                    font-size: clamp(1rem, -1.5rem + 4vw, 1rem); 
+                    font-size: clamp(1rem, -1.5rem + 4vw, 1.3rem); 
                     margin: 1rem 0;
                 }
             }
@@ -144,77 +80,6 @@
             }
         }
 
-        .graphic-box,
-        .graphic-box2,
-        .graphic-box3 {
-
-            .select-container {
-                margin-top: 1rem;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 0.5rem;
-                margin-bottom: 1rem;
-
-
-                select {
-                    padding: 0.5rem;
-                    border: 1px solid #d1d5db;
-                    border-radius: 0.375rem;
-                    width: 200px;
-                    max-width: 100%;
-                    font-size: clamp(0.8rem, -1.5rem + 4vw, 0.8rem);
-                    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
-                }
-
-                select:focus {
-                    outline: none;
-                    border-color: #3b82f6;
-                    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-                }
-            }
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-
-            #graphics-container {
-                flex-direction: column;
-                align-items: center;
-
-                .graphic-box,
-                .graphic-box2,
-                .graphic-box3,
-                .graphic-box4 {
-                    width: 100%;
-                    max-width: 100%;
-                    padding: 1rem;
-                }
-            }
-        }
-
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border-left-color: #7275b5;
-            animation: spin 1s ease infinite;
-            margin: 0 auto;
-            color: #4b5563;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
 
     </style>
 </head>
@@ -251,14 +116,14 @@
         <div id="graphics-container" class="mt-8" style="width: 100%;">
             <div class="graphic-box">
                 <h2>Games x Demos</h2>
-                <div id="tipo-jogo-chart-container" class="chart-container">
+                <div id="tipo-jogo-chart-container" class="chart-container" style="width: 400px;justify-self: center;">
                     <canvas id="tipo-jogo-chart"></canvas>
                 </div>
                 <h2>Cerca de 98,31% são jogos e 1,69% são demos.</h2>
             </div>
             <div class="graphic-box2">
                 <h2>Gratuitos x Pagos</h2>
-                <div id="gratuidade-chart-container" class="chart-container">
+                <div id="gratuidade-chart-container" class="chart-container" style="width: 400px;justify-self: center;" >
                     <canvas id="gratuidade-chart"></canvas>
                 </div>
                 <h2>Cerca de 14,81% são pagos e 85,19% são gratuitos.</h2>
@@ -270,6 +135,17 @@
                 </div>
                 <h2>Cerca de 86.66% são pagos e 13.34% são gratuitos.</h2>
             </div>
+
+            <div style="width: 100%;justify-items: center;">
+                <div class="text-container">
+                    <div id="box" class="box1">
+                        <h1>FREE TO PLAY</h1>
+                        <p>Jogos F2P têm uma vantagem inerente em popularidade em termos de número de jogadores, devido à ausência de custo inicial. 
+                            Eles podem atingir bases de usuários gigantescas muito mais rapidamente. Possuindo números de jogadores ativos simultâneos geralmente maiores.</p3>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div id="graphics-container" class="mt-8" style="width: 100%; background: white; margin-bottom: 2rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 1.5rem; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);">
@@ -388,7 +264,7 @@
                 tipoJogoChartInstance.destroy();
             }
             const graficoConfig = {
-                type: 'bar',
+                type: 'doughnut',
                 data: {
                     labels: labels,
                     datasets: [{
@@ -436,7 +312,7 @@
                 gratuidadeChartInstance.destroy();
             }
             const graficoConfig = {
-                type: 'bar',
+                type: 'doughnut',
                 data: {
                     labels: labels,
                     datasets: [{

@@ -6,6 +6,8 @@
 
     <title>SteamSpot</title>
 
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <link rel="stylesheet" href="/spotstyle.css">
     <link rel="stylesheet" href="/header.css">
     <script type="text/javascript" src="/steamspot.js"></script>
@@ -15,6 +17,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <script>
+        $(function () {
+            $("#header").load("/header.html");
+        });
+    </script>
 
     <style>
         .fa-circle-up.rotate-180 {
@@ -41,19 +49,19 @@
 
                 h1{
                     text-align: center;
-                    font-size: clamp(1rem, -1.5rem + 4vw, 2rem);
+                    font-size: clamp(1rem, -1.5rem + 4vw, 1.5rem);
                     margin-bottom: 2rem;
                 }
                 p{
                     display: flex;
-                    font-size: clamp(1rem, -1.5rem + 4vw, 1.5rem);
+                    font-size: clamp(1rem, -1.5rem + 4vw, 1.2rem);
                     text-align: justify;
                     line-height: 2;
                     
                 }
                 ul{
                     justify-content: space-around;
-                    font-size: clamp(1rem, -1.5rem + 4vw, 1.5rem);
+                    font-size: clamp(1rem, -1.5rem + 4vw, 1.2rem);
                     text-align: justify;
                     line-height: 2;
                 }
@@ -64,6 +72,8 @@
             font-family: "Roboto", sans-serif;
             padding: 0 3vw;
             border-bottom: 2px white solid;
+            border-top: 2px white solid;
+            margin-top: 1rem;
 
             h1 {
                 color: #ffffff; 
@@ -98,8 +108,7 @@
                 justify-self: center;
             }
         }
-        section:hover{background-image: linear-gradient(to left, rgb(0, 18, 34),rgb(2, 55, 102),rgb(0, 18, 34));}
-
+        
         #game-list {
             display: block;
             list-style: none;
@@ -161,7 +170,6 @@
 
         .textsecond-container{
             background-image: linear-gradient(to left, rgb(0, 18, 34),rgb(0, 19, 36),rgb(0, 18, 34));
-            height: 400px;
         }
         
     </style>
@@ -169,22 +177,7 @@
 </head>
 
 <body>
-    <header>
-        <nav>
-            <a id="logocontent" href="">
-                <img src="/imgs/xsteamlog.png" style="height: 80px;">
-                <div class="titlelogo"><text>SteamSpotS</text></div>
-            </a>
-
-            <ul class="navbar">
-                <li><a href="/Page/Steam-Games.html"> GAMES </a></li>
-                <li><a href="/Page/Games-Insights.html"> INSIGHTS </a></li>
-                <li><a href="/Page/Reviews.html"> AVALIAÇÕES </a></li>
-                <li><a href="/Page/Categories.html"> CATEGORIAS </a></li>
-                <li><a href="/Page/Tags.html"> TAGS </a></li>
-            </ul>
-        </nav>
-    </header>
+    <header id="header"></header>
 
     <main>
         <section class="firstcontainer">     
@@ -223,6 +216,16 @@
             </div>
         </section>
 
+        <section class="secondcontainer">
+            <div class="header-content">
+                <i id="toggle-icon" class="fa-solid fa-circle-up" style="font-size: clamp(2rem, -1.5rem + 4vw, 5rem);"></i>
+                <h1>Top 10 + Acessados da Steam no Momento</h1>
+            </div>
+
+            <ul id="game-list" style="display: none;">
+            </ul>
+        </section>
+
         <div class="text-container">
             <div id="box" class="box1">
                 <h1>Existe uma fórmula do Sucesso?</h1>
@@ -250,19 +253,6 @@
             </div>
         </div>
 
-        <section class="secondcontainer">
-            <div class="header-content">
-                <i id="toggle-icon" class="fa-solid fa-circle-up" style="font-size: clamp(2rem, -1.5rem + 4vw, 5rem);"></i>
-                <h1>Top 10 Acessados da Steam Atualmente</h1>
-            </div>
-
-            <ul id="game-list" style="display: none;">
-            </ul>
-        </section>
-
-        <div class="textsecond-container">
-
-        </div>
     </main>
     
     <footer>
